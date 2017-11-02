@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="vfs.libarchive"
+  version="1.0.0"
+  name="Archive support"
+  provider-name="spiff">
+  <requires>@ADDON_DEPENDS@</requires>
+  <extension
+    point="kodi.vfs"
+    protocols="archive"
+    extensions=".7z|.tar.gz|.tar.bz2|.zip|.rar"
+    files="true"
+    directories="true"
+    filedirectories="true"
+    library_@PLATFORM@="@LIBRARY_FILENAME@" />
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Archive support</summary>
+    <description lang="en">Archive support</description>
+    <platform>@PLATFORM@</platform>
+  </extension>
+</addon>
