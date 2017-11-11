@@ -21,6 +21,7 @@
 #include "p8-platform/threads/mutex.h"
 #include <kodi/addon-instance/VFS.h>
 #include <kodi/General.h>
+#include <cctype>
 
 extern "C" {
 #include <archive.h>
