@@ -63,20 +63,68 @@ class CArchiveFile
     struct archive* ar = nullptr;
     struct archive_entry* entry = nullptr;
     int64_t pos = 0;
+    std::string url;
+    kodi::vfs::CFile file;
+    std::vector<uint8_t> buff;
+
+    bool Open()
+    {
+      if (!file.OpenFile(url))
+        return false;
+
+      size_t chunk = file.GetChunkSize();
+      buff.resize(chunk ? chunk : 10240);
+      ar = archive_read_new();
+      archive_read_support_filter_all(ar);
+      archive_read_support_format_all(ar);
+      // TODO: Probe VFS for seekability
+      archive_read_set_seek_callback(ar, ArchiveSeek);
+      int r = archive_read_open(ar, this, nullptr, ArchiveRead, ArchiveClose);
+      if (r != ARCHIVE_OK)
+      {
+        archive_read_free(ar);
+        return false;
+      }
+
+      return true;
+    }
   };
 public:
+  //! \brief Read callback for VFS.
+  static la_ssize_t ArchiveRead(struct archive*,
+                                void* client_data, const void** buff)
+  {
+    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    *buff = ctx->buff.data();
+    la_ssize_t read = ctx->file.Read(ctx->buff.data(), ctx->buff.size());
+    return read;
+  }
+
+  //! \brief Seek callback for VFS.
+  static la_int64_t ArchiveSeek(struct archive*, void* client_data,
+                                la_int64_t offset, int whence)
+  {
+    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    return ctx->file.Seek(offset, whence);
+  }
+
+  //! \brief Close callback for VFS.
+  static int ArchiveClose(struct archive*, void* client_data)
+  {
+    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    ctx->file.Close();
+
+    return ARCHIVE_OK;
+  }
+
   CArchiveFile(KODI_HANDLE instance) : CInstanceVFS(instance) { }
 
   virtual void* Open(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    ctx->ar = archive_read_new();
-    archive_read_support_filter_all(ctx->ar);
-    archive_read_support_format_all(ctx->ar);
-    int r = archive_read_open_filename(ctx->ar, url.hostname, 10240);
-    if (r != ARCHIVE_OK)
+    ctx->url = url.hostname;
+    if (!ctx->Open())
     {
-      archive_read_free(ctx->ar);
       delete ctx;
       return nullptr;
     }
@@ -168,40 +216,43 @@ public:
   {
     return false;
   }
-  
-  virtual bool GetDirectory(const VFSURL& url, 
+
+  virtual bool GetDirectory(const VFSURL& url,
                             std::vector<kodi::vfs::CDirEntry>& items,
                             CVFSCallbacks callbacks) override
   {
-    struct archive* ar = archive_read_new();
-    archive_read_support_filter_all(ar);
-    archive_read_support_format_all(ar);
-    int r = archive_read_open_filename(ar, url.hostname, 10240);
-    if (r != ARCHIVE_OK)
+    ArchiveCtx* ctx = new ArchiveCtx;
+    ctx->url = url.hostname;
+    if (!ctx->Open())
+    {
+      delete ctx;
       return false;
+    }
 
-    ListArchive(ar, url.url, items);
-    archive_read_free(ar);
+    ListArchive(ctx->ar, url.url, items);
+    archive_read_free(ctx->ar);
+    delete ctx;
 
     return !items.empty();
   }
-  
-  virtual bool ContainsFiles(const VFSURL& url, 
+
+  virtual bool ContainsFiles(const VFSURL& url,
                              std::vector<kodi::vfs::CDirEntry>& items,
                              std::string& rootpath) override
   {
     std::string encoded = URLEncode(url.url);
     rootpath = "archive://"+encoded + "/";
-
-    struct archive* ar = archive_read_new();
-    archive_read_support_filter_all(ar);
-    archive_read_support_format_all(ar);
-    int r = archive_read_open_filename(ar, url.url, 10240);
-    if (r != ARCHIVE_OK)
+    ArchiveCtx* ctx = new ArchiveCtx;
+    ctx->url = url.url;
+    if (!ctx->Open())
+    {
+      delete ctx;
       return false;
+    }
 
-    ListArchive(ar, rootpath, items);
-    archive_read_free(ar);
+    ListArchive(ctx->ar, rootpath, items);
+    archive_read_free(ctx->ar);
+    delete ctx;
 
     return !items.empty();
   }
@@ -212,7 +263,7 @@ private:
     struct archive_entry* entry;
     while (archive_read_next_header(ar, &entry) == ARCHIVE_OK)
     {
-      kodi::vfs::CDirEntry kentry;  
+      kodi::vfs::CDirEntry kentry;
       std::string name = archive_entry_pathname_utf8(entry);
       kentry.SetLabel(name);
       kentry.SetPath(rootpath+name);
