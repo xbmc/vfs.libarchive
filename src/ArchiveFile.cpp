@@ -22,6 +22,9 @@
 #include <kodi/addon-instance/VFS.h>
 #include <kodi/General.h>
 #include <cctype>
+#include <sstream>
+#include <set>
+#include <string>
 
 extern "C" {
 #include <archive.h>
@@ -230,7 +233,7 @@ public:
       return false;
     }
 
-    ListArchive(ctx->ar, url.url, items);
+    ListArchive(ctx->ar, url.url, items, false, url.filename);
     archive_read_free(ctx->ar);
     delete ctx;
 
@@ -251,27 +254,71 @@ public:
       return false;
     }
 
-    ListArchive(ctx->ar, rootpath, items);
+    ListArchive(ctx->ar, rootpath, items, true);
     archive_read_free(ctx->ar);
     delete ctx;
 
     return !items.empty();
   }
 private:
+  std::vector<std::string> splitString(const std::string& whole)
+  {
+    std::vector<std::string> result;
+    std::istringstream f(whole);
+    std::string s;
+    while (getline(f, s, '/'))
+      result.push_back(s);
+
+    return result;
+  }
   void ListArchive(struct archive* ar, const std::string& rootpath,
-                   std::vector<kodi::vfs::CDirEntry>& items)
+                   std::vector<kodi::vfs::CDirEntry>& items,
+                   bool flat,
+                   const std::string& subdir = "")
   {
     struct archive_entry* entry;
+    std::set<std::string> folders;
+    std::vector<std::string> rootSplit = splitString(subdir);
+
     while (archive_read_next_header(ar, &entry) == ARCHIVE_OK)
     {
-      kodi::vfs::CDirEntry kentry;
       std::string name = archive_entry_pathname_utf8(entry);
-      kentry.SetLabel(name);
-      kentry.SetPath(rootpath+name);
-      kentry.SetTitle(name);
-      kentry.SetSize(archive_entry_size(entry));
-      kentry.SetDateTime(archive_entry_mtime(entry));
-      items.push_back(kentry);
+      std::vector<std::string> split = splitString(name);
+      if (split.size() > rootSplit.size())
+      {
+        bool folder = false;
+        bool match = true;
+        for (size_t i = 0; i < rootSplit.size(); ++i)
+        {
+          if (rootSplit[i] != split[i])
+          {
+            match = false;
+            break;
+          }
+        }
+
+        if (flat ||
+            (match && folders.find(split[rootSplit.size()]) == folders.end()))
+        {
+          kodi::vfs::CDirEntry kentry;
+          std::string label = split[rootSplit.size()];
+          std::string path = rootpath + split[rootSplit.size()];
+          bool folder = false;
+          if (split.size() > rootSplit.size()+1 || name.back() == '/')
+          {
+            path += '/';
+            folder = true;
+            folders.insert(split[rootSplit.size()]);
+          }
+          kentry.SetLabel(label);
+          kentry.SetTitle(label);
+          kentry.SetPath(path);
+          kentry.SetFolder(folder);
+          kentry.SetSize(archive_entry_size(entry));
+          kentry.SetDateTime(archive_entry_mtime(entry));
+          items.push_back(kentry);
+        }
+      }
       archive_read_data_skip(ar);
     }
   }
