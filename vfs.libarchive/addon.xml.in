@@ -8,7 +8,7 @@
   <extension
     point="kodi.vfs"
     protocols="archive"
-    extensions=".7z|.tar.gz|.tar.bz2|.zip|.rar"
+    extensions=".7z|.tar.gz|.tar.bz2||.tar.xz|.zip|.rar|.tgz|.tbz2"
     files="true"
     directories="true"
     filedirectories="true"
