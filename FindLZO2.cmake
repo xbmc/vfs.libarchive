@@ -19,7 +19,7 @@ endif()
 
 find_path(LZO2_INCLUDE_DIR NAMES lzo/lzo2a.h
                            PATHS ${PC_LZO2_INCLUDEDIR})
-find_library(LZO2_LIBRARY NAMES lz4
+find_library(LZO2_LIBRARY NAMES lzo2
                           PATHS ${PC_LZO2_LIBDIR})
 
 set(LZO2_VERSION ${PC_LZO2_VERSION})
