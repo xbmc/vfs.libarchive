@@ -1,8 +1,8 @@
 Source: kodi-vfs-libarchive
 Priority: extra
 Maintainer: Arne Morten Kvarving <spiff@kodi.tv>
-Build-Depends: debhelper (>= 9.0.0), cmake, libarchive-dev, kodi-addon-dev
-               liblzo2-dev, liblz4-dev, liblzma-dev, libz2-dev, zlib1g-dev
+Build-Depends: debhelper (>= 9.0.0), cmake, libarchive-dev, kodi-addon-dev,
+               liblzo2-dev, liblz4-dev, liblzma-dev, libbz2-dev, zlib1g-dev
 Standards-Version: 3.9.4
 Section: libs
 
