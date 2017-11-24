@@ -1,0 +1,21 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1900,7 +1900,7 @@
+ #
+ #
+ #
+-INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
++INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive ${CMAKE_CURRENT_SOURCE_DIR}/contrib/android/include)
+ #
+ IF(MSVC)
+   ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
+--- a/libarchive/CMakeLists.txt
++++ b/libarchive/CMakeLists.txt
+@@ -9,6 +9,7 @@
+ SET(include_HEADERS
+   archive.h
+   archive_entry.h
++  ../contrib/android/include/android_lf.h
+ )
+ 
+ # Sources and private headers
