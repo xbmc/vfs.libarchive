@@ -2,7 +2,7 @@ project(xz-utils)
 
 cmake_minimum_required(VERSION 2.8)
 
-add_definitions(-DWIN32 -DHAVE_CONFIG_H -D_LIB)
+add_definitions(-DWIN32 -DHAVE_CONFIG_H -D_LIB -D_CRT_SECURE_NO_WARNINGS)
 include_directories(${PROJECT_SOURCE_DIR}/windows
                     ${PROJECT_SOURCE_DIR}/src/liblzma/common
                     ${PROJECT_SOURCE_DIR}/src/common
