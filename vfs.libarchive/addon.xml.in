@@ -7,8 +7,8 @@
   <requires>@ADDON_DEPENDS@</requires>
   <extension
     point="kodi.vfs"
-    protocols="archive"
-    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.tgz|.tbz2|.gz|.bz2|.xz"
+    protocols="archive|rar"
+    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.rar|.tgz|.tbz2|.gz|.bz2|.xz"
     files="true"
     directories="true"
     filedirectories="true"
