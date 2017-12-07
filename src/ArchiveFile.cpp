@@ -19,8 +19,11 @@
  */
 
 #include <kodi/addon-instance/VFS.h>
+#include <kodi/Filesystem.h>
 #include <kodi/General.h>
+#include <algorithm>
 #include <cctype>
+#include <regex>
 #include <sstream>
 #include <set>
 #include <string>
@@ -29,7 +32,6 @@ extern "C" {
 #include <archive.h>
 #include <archive_entry.h>
 }
-
 
 static std::string URLEncode(const std::string& strURLData)
 {
@@ -61,29 +63,95 @@ static std::string URLEncode(const std::string& strURLData)
 class CArchiveFile
   : public kodi::addon::CInstanceVFS
 {
+  struct CbData
+  {
+    std::string url;
+    kodi::vfs::CFile file;
+    std::vector<uint8_t> buff;
+
+    CbData(const std::string& path) : url(path) {}
+  };
+
   struct ArchiveCtx
   {
     struct archive* ar = nullptr;
     struct archive_entry* entry = nullptr;
     int64_t pos = 0;
-    std::string url;
+    std::vector<CbData> cbs;
     kodi::vfs::CFile file;
-    std::vector<uint8_t> buff;
 
-    bool Open()
+    bool Open(const std::string& url)
     {
-      if (!file.OpenFile(url))
-        return false;
+      // check for multi-volume rar
+      bool oldStyle = false;
+      std::regex ext_re("(.+[/\\\\])(.+\\.rar)$");
+      std::smatch match;
+      if (std::regex_match(url, match, ext_re))
+      {
+        std::regex part_re("(.+\\.part)[0-9]+\\.rar$");
+        std::smatch match2;
+        bool checkDir = false;
+        std::string fname = match[2].str();
+        if (std::regex_match(fname, match2, part_re))
+        {
+          checkDir = true;
+          fname = match2[2].str();
+        }
+        else
+        {
+          std::string nurl(url);
+          nurl[nurl.size()-2] = '0';
+          nurl[nurl.size()-1] = '0';
+          if (kodi::vfs::FileExists(nurl.c_str(), true))
+          {
+            checkDir = true;
+            oldStyle = true;
+            fname = match[2].str();
+            fname.erase(fname.size()-3);
+          }
+        }
 
-      size_t chunk = file.GetChunkSize();
-      buff.resize(chunk ? chunk : 10240);
+        if (checkDir)
+        {
+          std::vector<kodi::vfs::CDirEntry> items;
+          kodi::vfs::GetDirectory(match[1].str(), "", items);
+          for (auto& it : items)
+          {
+            if (it.Label().find(fname) != std::string::npos)
+              cbs.emplace_back(CbData(it.Path()));
+          }
+        }
+      }
+
+      if (cbs.empty())
+        cbs.emplace_back(CbData(url));
+
+      auto&& CbSort = [](const CbData& d1, const CbData& d2) -> bool
+                      {
+                        return d2.url.compare(d1.url) > 0;
+                      };
+
+      std::sort(cbs.begin(), cbs.end(), CbSort);
+      if (oldStyle)
+      {
+        cbs.insert(cbs.begin(), cbs.back());
+        cbs.pop_back();
+      }
+
       ar = archive_read_new();
       archive_read_support_filter_all(ar);
       archive_read_support_format_all(ar);
       // TODO: Probe VFS for seekability
       archive_read_set_seek_callback(ar, ArchiveSeek);
-      int r = archive_read_open(ar, this, nullptr, ArchiveRead, ArchiveClose);
-      if (r != ARCHIVE_OK)
+      archive_read_set_read_callback(ar, ArchiveRead);
+      archive_read_set_close_callback(ar, ArchiveClose);
+      archive_read_set_switch_callback(ar, ArchiveSwitch);
+      archive_read_set_open_callback(ar, ArchiveOpen);
+
+      for (auto& it : cbs)
+        archive_read_append_callback_data(ar, &it);
+
+      if (archive_read_open1(ar) != ARCHIVE_OK)
       {
         archive_read_free(ar);
         return false;
@@ -92,12 +160,31 @@ class CArchiveFile
       return true;
     }
   };
+
 public:
+  static int ArchiveOpen(archive* a, void* client_data)
+  {
+    CbData* ctx = static_cast<CbData*>(client_data);
+    if (!ctx->file.OpenFile(ctx->url))
+      return ARCHIVE_FATAL;
+
+    size_t chunk = ctx->file.GetChunkSize();
+    ctx->buff.resize(chunk ? chunk : 10240);
+
+    return ARCHIVE_OK;
+  }
+
+  static int ArchiveSwitch(archive* a, void* client_data1, void* client_data2)
+  {
+    ArchiveClose(a, client_data1);
+    return ArchiveOpen(a, client_data2);
+  }
+
   //! \brief Read callback for VFS.
   static la_ssize_t ArchiveRead(struct archive*,
                                 void* client_data, const void** buff)
   {
-    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    CbData* ctx = static_cast<CbData*>(client_data);
     *buff = ctx->buff.data();
     la_ssize_t read = ctx->file.Read(ctx->buff.data(), ctx->buff.size());
     return read;
@@ -107,15 +194,16 @@ public:
   static la_int64_t ArchiveSeek(struct archive*, void* client_data,
                                 la_int64_t offset, int whence)
   {
-    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    CbData* ctx = static_cast<CbData*>(client_data);
     return ctx->file.Seek(offset, whence);
   }
 
   //! \brief Close callback for VFS.
   static int ArchiveClose(struct archive*, void* client_data)
   {
-    ArchiveCtx* ctx = static_cast<ArchiveCtx*>(client_data);
+    CbData* ctx = static_cast<CbData*>(client_data);
     ctx->file.Close();
+    ctx->buff.clear();
 
     return ARCHIVE_OK;
   }
@@ -125,8 +213,7 @@ public:
   virtual void* Open(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    ctx->url = url.hostname;
-    if (!ctx->Open())
+    if (!ctx->Open(url.hostname))
     {
       delete ctx;
       return nullptr;
@@ -225,8 +312,7 @@ public:
                             CVFSCallbacks callbacks) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    ctx->url = url.hostname;
-    if (!ctx->Open())
+    if (!ctx->Open(url.hostname))
     {
       delete ctx;
       return false;
@@ -243,11 +329,25 @@ public:
                              std::vector<kodi::vfs::CDirEntry>& items,
                              std::string& rootpath) override
   {
+    if (strstr(url.filename, ".rar"))
+    {
+      std::string fname(url.filename);
+      size_t spos = fname.rfind('/');
+      if (spos == std::string::npos)
+        spos = fname.rfind('\\');
+      fname.erase(0, spos);
+      std::regex part_re("\\.part([0-9]+)\\.rar$");
+      std::smatch match;
+      if (std::regex_search(fname, match, part_re))
+      {
+        if (std::stoul(match[1].str()) != 1)
+          return false;
+      }
+    }
     std::string encoded = URLEncode(url.url);
     rootpath = "archive://"+encoded + "/";
     ArchiveCtx* ctx = new ArchiveCtx;
-    ctx->url = url.url;
-    if (!ctx->Open())
+    if (!ctx->Open(url.url))
     {
       delete ctx;
       return false;
@@ -270,6 +370,7 @@ private:
 
     return result;
   }
+
   void ListArchive(struct archive* ar, const std::string& rootpath,
                    std::vector<kodi::vfs::CDirEntry>& items,
                    bool flat,
