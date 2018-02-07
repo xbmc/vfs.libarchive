@@ -29,10 +29,10 @@ set(ARCHIVE_SOURCES src/ArchiveFile.cpp)
 set(DEPLIBS ${LibArchive_LIBRARIES}
             ${LIBLZMA_LIBRARIES}
             ${BZIP2_LIBRARIES}
+            ${OPENSSL_LIBRARIES}
             ${ZLIB_LIBRARIES}
             ${LZ4_LIBRARIES}
-            ${LZO2_LIBRARIES}
-            ${OPENSSL_LIBRARIES})
+            ${LZO2_LIBRARIES})
 
 add_definitions(-DLIBARCHIVE_STATIC)
 
