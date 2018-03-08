@@ -30,7 +30,7 @@ index 73bf07b..ff6d610 100644
  ENDIF(WIN32)
  
  IF(MSVC)
-@@ -1267,8 +1267,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
+@@ -1267,8 +1271,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
  CHECK_FUNCTION_EXISTS_GLIBC(vfork HAVE_VFORK)
  CHECK_FUNCTION_EXISTS_GLIBC(wcrtomb HAVE_WCRTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(wcscmp HAVE_WCSCMP)
@@ -46,7 +46,7 @@ index 73bf07b..ff6d610 100644
  CHECK_FUNCTION_EXISTS_GLIBC(wctomb HAVE_WCTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(_ctime64_s HAVE__CTIME64_S)
  CHECK_FUNCTION_EXISTS_GLIBC(_fseeki64 HAVE__FSEEKI64)
-@@ -1870,7 +1874,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
+@@ -1870,7 +1879,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
  # Libmd has to be probed after OpenSSL.
  CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA512" LIBMD)
  
@@ -57,6 +57,15 @@ index 73bf07b..ff6d610 100644
  
  # Generate "config.h" from "build/cmake/config.h.in"
  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/config.h.in
+@@ -1906,7 +1917,7 @@ if(NOT WIN32)
+ ENDIF()
+ #
+ IF(MSVC)
+-  ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
++  ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE)
+ ENDIF(MSVC)
+ 
+ IF(ENABLE_TEST)
 diff --git a/cpio/CMakeLists.txt b/cpio/CMakeLists.txt
 index 85fda77..233a5fa 100644
 --- a/cpio/CMakeLists.txt
@@ -78,7 +87,7 @@ diff --git a/libarchive/CMakeLists.txt b/libarchive/CMakeLists.txt
 index 5e958da..6044f01 100644
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -204,14 +204,14 @@ SET(libarchive_MANS
+@@ -205,14 +205,14 @@ SET(libarchive_MANS
    tar.5
  )
  
