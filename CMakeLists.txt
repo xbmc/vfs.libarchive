@@ -34,7 +34,7 @@ set(DEPLIBS ${LibArchive_LIBRARIES}
             ${LZ4_LIBRARIES}
             ${LZO2_LIBRARIES})
 
-add_definitions(-DLIBARCHIVE_STATIC)
+add_definitions(-DLIBARCHIVE_STATIC -D_CRT_NONSTDC_NO_DEPRECATE)
 
 build_addon(vfs.libarchive ARCHIVE DEPLIBS)
 include(CPack)

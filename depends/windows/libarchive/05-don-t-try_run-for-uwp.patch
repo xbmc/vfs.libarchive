@@ -2,7 +2,7 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index bbbdb50..9ac0f0e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -399,11 +399,13 @@ IF(ZLIB_FOUND)
+@@ -403,11 +403,13 @@ IF(ZLIB_FOUND)
      #
      # Test if ZLIB_WINAPI macro is needed to use.
      #

@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 if(NOT WIN32)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_FILE_OFFSET_BITS=64")
 elseif(CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
-  add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  add_definitions(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_WARNINGS)
 endif()
 
 set(SOURCES blocksort.c
