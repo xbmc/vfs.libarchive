@@ -1,1 +1,1 @@
-bz2 http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz
+bz2 http://mirrors.kodi.tv/build-deps/sources/bzip2-1.0.6.tar.gz
