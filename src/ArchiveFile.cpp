@@ -59,9 +59,7 @@ static std::string URLEncode(const std::string& strURLData)
   return strResult;
 }
 
-
-class CArchiveFile
-  : public kodi::addon::CInstanceVFS
+class CArchiveFile : public kodi::addon::CInstanceVFS
 {
   struct CbData
   {
@@ -115,9 +113,11 @@ class CArchiveFile
         {
           std::vector<kodi::vfs::CDirEntry> items;
           kodi::vfs::GetDirectory(match[1].str(), "", items);
+          fname.erase(fname.size()-1);
+          std::regex fname_re(".*"+fname+"\\.r(ar|[0-9]+)$");
           for (auto& it : items)
           {
-            if (it.Label().find(fname) != std::string::npos)
+            if (std::regex_match(it.Label(), fname_re))
               cbs.emplace_back(CbData(it.Path()));
           }
         }
