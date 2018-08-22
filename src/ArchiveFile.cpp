@@ -113,11 +113,11 @@ class CArchiveFile : public kodi::addon::CInstanceVFS
         {
           std::vector<kodi::vfs::CDirEntry> items;
           kodi::vfs::GetDirectory(match[1].str(), "", items);
-          fname.erase(fname.size()-1);
-          std::regex fname_re(".*"+fname+"\\.r(ar|[0-9]+)$");
+          std::regex fname_re(".*\\.r(ar|[0-9]+)$");
           for (auto& it : items)
           {
-            if (std::regex_match(it.Label(), fname_re))
+            if (it.Label().find(fname) != std::string::npos &&
+                std::regex_match(it.Label(), fname_re))
               cbs.emplace_back(CbData(it.Path()));
           }
         }
