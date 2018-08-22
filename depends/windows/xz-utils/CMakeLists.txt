@@ -6,7 +6,7 @@ add_definitions(-DWIN32 -DHAVE_CONFIG_H -D_LIB -D_CRT_SECURE_NO_WARNINGS)
 if(CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
   add_definitions(-D_WIN32_WINNT=0x0A00)
 endif()
-include_directories(${PROJECT_SOURCE_DIR}/windows
+include_directories(${PROJECT_SOURCE_DIR}/windows/vs2013
                     ${PROJECT_SOURCE_DIR}/src/liblzma/common
                     ${PROJECT_SOURCE_DIR}/src/common
                     ${PROJECT_SOURCE_DIR}/src/liblzma/api
