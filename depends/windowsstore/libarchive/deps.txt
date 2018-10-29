@@ -1,0 +1,6 @@
+zlib
+bz2
+lz4
+lzo2
+xz-utils
+openssl
