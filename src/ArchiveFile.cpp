@@ -51,7 +51,7 @@ static std::string URLEncode(const std::string& strURLData)
     else
     {
       char temp[128];
-      sprintf(temp,"%%%2.2X", (unsigned int)((unsigned char)kar));
+      sprintf(temp,"%%%2.2x", (unsigned int)((unsigned char)kar));
       strResult += temp;
     }
   }
