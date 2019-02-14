@@ -51,7 +51,7 @@ static std::string URLEncode(const std::string& strURLData)
     else
     {
       char temp[128];
-      sprintf(temp,"%%%2.2X", (unsigned int)((unsigned char)kar));
+      sprintf(temp,"%%%2.2x", (unsigned int)((unsigned char)kar));
       strResult += temp;
     }
   }
@@ -299,6 +299,25 @@ public:
 
   virtual bool Exists(const VFSURL& url) override
   {
+    ArchiveCtx* ctx = new ArchiveCtx;
+    if (!ctx->Open(url.hostname))
+    {
+      delete ctx;
+      return false;
+    }
+
+    std::string encoded = URLEncode(url.hostname);
+    std::vector<kodi::vfs::CDirEntry> items;
+    ListArchive(ctx->ar, "archive://"+encoded+"/", items, false, "");
+    archive_read_free(ctx->ar);
+    delete ctx;
+
+    for (kodi::vfs::CDirEntry& item : items)
+    {
+      if (item.Path() == url.url)
+        return true;
+    }
+
     return false;
   }
 
