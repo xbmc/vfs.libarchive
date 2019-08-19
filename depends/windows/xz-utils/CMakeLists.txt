@@ -1,6 +1,5 @@
+cmake_minimum_required(VERSION 3.5)
 project(xz-utils)
-
-cmake_minimum_required(VERSION 2.8)
 
 add_definitions(-DWIN32 -DHAVE_CONFIG_H -D_LIB -D_CRT_SECURE_NO_WARNINGS)
 if(CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
