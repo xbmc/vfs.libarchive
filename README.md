@@ -2,13 +2,13 @@
 
 This is a [Kodi](http://kodi.tv) VFS addon to support archives.
 
-[![Build Status](https://travis-ci.org/xbmc/vfs.libarchive.svg?branch=master)](https://travis-ci.org/xbmc/vfs.libarchive)
-[![Build Status](https://ci.appveyor.com/api/projects/status/github/xbmc/vfs.libarchive?svg=true)](https://ci.appveyor.com/project/xbmc/vfs-libarchive)
+[![Build Status](https://travis-ci.org/xbmc/vfs.libarchive.svg?branch=Matrix)](https://travis-ci.org/xbmc/vfs.libarchive/branches)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/xbmc/vfs.libarchive?branch=Matrix&svg=true)](https://ci.appveyor.com/project/xbmc/vfs-libarchive?branch=Matrix)
 
 ## Build instructions
 
 When building the addon you have to use the correct branch depending on which version of Kodi you're building against. 
-For example, if you're building the `master` branch of Kodi you should checkout the `master` branch of this repository. 
+If you want to build the addon to be compatible with the latest kodi `master` commit, you need to checkout the branch with the current kodi codename.
 Also make sure you follow this README from the branch in question.
 
 ### Linux

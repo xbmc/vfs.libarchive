@@ -59,7 +59,7 @@ static std::string URLEncode(const std::string& strURLData)
   return strResult;
 }
 
-class CArchiveFile : public kodi::addon::CInstanceVFS
+class ATTRIBUTE_HIDDEN CArchiveFile : public kodi::addon::CInstanceVFS
 {
   struct CbData
   {
@@ -443,7 +443,7 @@ private:
   }
 };
 
-class CMyAddon : public kodi::addon::CAddonBase
+class ATTRIBUTE_HIDDEN CMyAddon : public kodi::addon::CAddonBase
 {
 public:
   CMyAddon() { }
