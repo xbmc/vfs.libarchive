@@ -16,6 +16,7 @@ set(SOURCES blocksort.c
             bzlib.c)
 
 add_library(bz2 ${SOURCES})
+set_property(TARGET bz2 PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 install(TARGETS bz2 DESTINATION lib)
 install(FILES bzlib.h DESTINATION include)
