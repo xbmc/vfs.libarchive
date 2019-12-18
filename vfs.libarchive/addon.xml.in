@@ -18,5 +18,7 @@
     <summary lang="en">Archive support</summary>
     <description lang="en">Archive support</description>
     <platform>@PLATFORM@</platform>
+    <license>GPL-2.0</license>
+    <source>https://github.com/xbmc/vfs.libarchive</source>
   </extension>
 </addon>
