@@ -210,7 +210,7 @@ public:
 
   CArchiveFile(KODI_HANDLE instance) : CInstanceVFS(instance) { }
 
-  virtual void* Open(const VFSURL& url) override
+  void* Open(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
     if (!ctx->Open(url.hostname))
@@ -233,7 +233,7 @@ public:
     return nullptr;
   }
 
-  virtual ssize_t Read(void* context, void* buffer, size_t uiBufSize) override
+  ssize_t Read(void* context, void* buffer, size_t uiBufSize) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -246,7 +246,7 @@ public:
     return read;
   }
 
-  virtual int64_t Seek(void* context, int64_t position, int whence) override
+  int64_t Seek(void* context, int64_t position, int whence) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
 
@@ -257,7 +257,7 @@ public:
     return ctx->pos;
   }
 
-  virtual int64_t GetLength(void* context) override
+  int64_t GetLength(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -266,7 +266,7 @@ public:
     return archive_entry_size(ctx->entry);
   }
 
-  virtual int64_t GetPosition(void* context) override
+  int64_t GetPosition(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -275,17 +275,17 @@ public:
     return ctx->pos;
   }
 
-  virtual int IoControl(void* context, XFILE::EIoControl request, void* param) override
+  int IoControl(void* context, XFILE::EIoControl request, void* param) override
   {
     return -1;
   }
 
-  virtual int Stat(const VFSURL& url, struct __stat64* buffer) override
+  int Stat(const VFSURL& url, struct __stat64* buffer) override
   {
     return -1;
   }
 
-  virtual bool Close(void* context) override
+  bool Close(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx)
@@ -297,7 +297,7 @@ public:
     return true;
   }
 
-  virtual bool Exists(const VFSURL& url) override
+  bool Exists(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
     if (!ctx->Open(url.hostname))
@@ -321,12 +321,12 @@ public:
     return false;
   }
 
-  virtual bool DirectoryExists(const VFSURL& url) override
+  bool DirectoryExists(const VFSURL& url) override
   {
     return false;
   }
 
-  virtual bool GetDirectory(const VFSURL& url,
+  bool GetDirectory(const VFSURL& url,
                             std::vector<kodi::vfs::CDirEntry>& items,
                             CVFSCallbacks callbacks) override
   {
@@ -344,7 +344,7 @@ public:
     return !items.empty();
   }
 
-  virtual bool ContainsFiles(const VFSURL& url,
+  bool ContainsFiles(const VFSURL& url,
                              std::vector<kodi::vfs::CDirEntry>& items,
                              std::string& rootpath) override
   {
@@ -446,8 +446,8 @@ private:
 class CMyAddon : public kodi::addon::CAddonBase
 {
 public:
-  CMyAddon() { }
-  virtual ADDON_STATUS CreateInstance(int instanceType, std::string instanceID, KODI_HANDLE instance, KODI_HANDLE& addonInstance) override
+  CMyAddon() = default;
+  ADDON_STATUS CreateInstance(int instanceType, std::string instanceID, KODI_HANDLE instance, KODI_HANDLE& addonInstance) override
   {
     addonInstance = new CArchiveFile(instance);
     return ADDON_STATUS_OK;
