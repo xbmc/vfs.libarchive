@@ -1,8 +1,6 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 73bf07b..ff6d610 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -217,7 +217,11 @@ IF(ENABLE_TEST)
+@@ -236,7 +236,11 @@ IF(ENABLE_TEST)
  ENDIF(ENABLE_TEST)
  
  IF(WIN32)
@@ -15,7 +13,7 @@ index 73bf07b..ff6d610 100644
      SET(NTDDI_VERSION 0x06020000)
      SET(_WIN32_WINNT 0x0602)
      SET(WINVER 0x0602)
-@@ -241,12 +245,12 @@ IF(WIN32)
+@@ -260,12 +264,12 @@ IF(WIN32)
      SET(NTDDI_VERSION 0x05010000)
      SET(_WIN32_WINNT 0x0501)
      SET(WINVER 0x0501)
@@ -30,7 +28,7 @@ index 73bf07b..ff6d610 100644
  ENDIF(WIN32)
  
  IF(MSVC)
-@@ -1267,8 +1271,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
+@@ -1358,8 +1362,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
  CHECK_FUNCTION_EXISTS_GLIBC(vfork HAVE_VFORK)
  CHECK_FUNCTION_EXISTS_GLIBC(wcrtomb HAVE_WCRTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(wcscmp HAVE_WCSCMP)
@@ -46,7 +44,7 @@ index 73bf07b..ff6d610 100644
  CHECK_FUNCTION_EXISTS_GLIBC(wctomb HAVE_WCTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(_ctime64_s HAVE__CTIME64_S)
  CHECK_FUNCTION_EXISTS_GLIBC(_fseeki64 HAVE__FSEEKI64)
-@@ -1870,7 +1879,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
+@@ -1966,7 +1975,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
  # Libmd has to be probed after OpenSSL.
  CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA512" LIBMD)
  
@@ -57,8 +55,8 @@ index 73bf07b..ff6d610 100644
  
  # Generate "config.h" from "build/cmake/config.h.in"
  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/config.h.in
-@@ -1906,7 +1917,7 @@ if(NOT WIN32)
- ENDIF()
+@@ -1999,7 +2010,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
+ INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
  #
  IF(MSVC)
 -  ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
@@ -66,8 +64,6 @@ index 73bf07b..ff6d610 100644
  ENDIF(MSVC)
  
  IF(ENABLE_TEST)
-diff --git a/cpio/CMakeLists.txt b/cpio/CMakeLists.txt
-index 85fda77..233a5fa 100644
 --- a/cpio/CMakeLists.txt
 +++ b/cpio/CMakeLists.txt
 @@ -20,10 +20,10 @@ IF(ENABLE_CPIO)
@@ -83,11 +79,9 @@ index 85fda77..233a5fa 100644
  
    # bsdcpio documentation
    SET(bsdcpio_MANS bsdcpio.1)
-diff --git a/libarchive/CMakeLists.txt b/libarchive/CMakeLists.txt
-index 5e958da..6044f01 100644
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -205,14 +205,14 @@ SET(libarchive_MANS
+@@ -210,14 +210,14 @@ SET(libarchive_MANS
    tar.5
  )
  
@@ -102,10 +96,8 @@ index 5e958da..6044f01 100644
 -ENDIF(WIN32 AND NOT CYGWIN)
 +ENDIF(WIN32 AND NOT CYGWIN AND NOT CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
  
- IF(ARCHIVE_ACL_DARWIN)
-   LIST(APPEND libarchive_SOURCES archive_disk_acl_darwin.c)
-diff --git a/libarchive/archive_check_magic.c b/libarchive/archive_check_magic.c
-index 288ce23..f3833e7 100644
+ IF(ARCHIVE_BLAKE2)
+   LIST(APPEND libarchive_SOURCES archive_blake2sp_ref.c)
 --- a/libarchive/archive_check_magic.c
 +++ b/libarchive/archive_check_magic.c
 @@ -67,7 +67,11 @@ diediedie(void)
@@ -121,11 +113,9 @@ index 288ce23..f3833e7 100644
  #endif
  	abort();        /* Terminate the program abnormally. */
  }
-diff --git a/libarchive/archive_entry.h b/libarchive/archive_entry.h
-index bcc2962..a3cc0e4 100644
 --- a/libarchive/archive_entry.h
 +++ b/libarchive/archive_entry.h
-@@ -294,7 +294,7 @@ __LA_DECL int archive_entry_is_encrypted(struct archive_entry *);
+@@ -303,7 +303,7 @@ __LA_DECL int archive_entry_is_encrypted(struct archive_entry *);
  
  __LA_DECL void	archive_entry_set_atime(struct archive_entry *, time_t, long);
  __LA_DECL void  archive_entry_unset_atime(struct archive_entry *);
@@ -134,8 +124,6 @@ index bcc2962..a3cc0e4 100644
  __LA_DECL void archive_entry_copy_bhfi(struct archive_entry *, BY_HANDLE_FILE_INFORMATION *);
  #endif
  __LA_DECL void	archive_entry_set_birthtime(struct archive_entry *, time_t, long);
-diff --git a/libarchive/archive_random.c b/libarchive/archive_random.c
-index 65ea691..aa0bb1c 100644
 --- a/libarchive/archive_random.c
 +++ b/libarchive/archive_random.c
 @@ -70,7 +70,7 @@ static void arc4random_buf(void *, size_t);
@@ -173,8 +161,6 @@ index 65ea691..aa0bb1c 100644
  
  #if !defined(HAVE_ARC4RANDOM_BUF) && (!defined(_WIN32) || defined(__CYGWIN__))
  
-diff --git a/libarchive/archive_read_support_filter_bzip2.c b/libarchive/archive_read_support_filter_bzip2.c
-index 3885a7c..d2e8b00 100644
 --- a/libarchive/archive_read_support_filter_bzip2.c
 +++ b/libarchive/archive_read_support_filter_bzip2.c
 @@ -169,6 +169,7 @@ bzip2_reader_bid(struct archive_read_filter_bidder *self, struct archive_read_fi
@@ -195,8 +181,6 @@ index 3885a7c..d2e8b00 100644
  }
  
  
-diff --git a/libarchive/archive_read_support_filter_grzip.c b/libarchive/archive_read_support_filter_grzip.c
-index 84c86ae..66c32b4 100644
 --- a/libarchive/archive_read_support_filter_grzip.c
 +++ b/libarchive/archive_read_support_filter_grzip.c
 @@ -109,6 +109,7 @@ grzip_bidder_bid(struct archive_read_filter_bidder *self,
@@ -215,8 +199,6 @@ index 84c86ae..66c32b4 100644
 +    return ARCHIVE_FATAL;
 +#endif
  }
-diff --git a/libarchive/archive_read_support_filter_lrzip.c b/libarchive/archive_read_support_filter_lrzip.c
-index c82a8e2..b4100b9 100644
 --- a/libarchive/archive_read_support_filter_lrzip.c
 +++ b/libarchive/archive_read_support_filter_lrzip.c
 @@ -120,6 +120,7 @@ lrzip_bidder_bid(struct archive_read_filter_bidder *self,
@@ -235,8 +217,6 @@ index c82a8e2..b4100b9 100644
 +    return ARCHIVE_FATAL;
 +#endif
  }
-diff --git a/libarchive/archive_read_support_filter_lz4.c b/libarchive/archive_read_support_filter_lz4.c
-index 147f502..b6d361a 100644
 --- a/libarchive/archive_read_support_filter_lz4.c
 +++ b/libarchive/archive_read_support_filter_lz4.c
 @@ -204,6 +204,7 @@ lz4_reader_bid(struct archive_read_filter_bidder *self,
@@ -257,8 +237,6 @@ index 147f502..b6d361a 100644
  }
  
  
-diff --git a/libarchive/archive_read_support_filter_lzop.c b/libarchive/archive_read_support_filter_lzop.c
-index a1c392f..191688f 100644
 --- a/libarchive/archive_read_support_filter_lzop.c
 +++ b/libarchive/archive_read_support_filter_lzop.c
 @@ -160,6 +160,7 @@ lzop_bidder_bid(struct archive_read_filter_bidder *self,
@@ -279,8 +257,6 @@ index a1c392f..191688f 100644
  }
  #else
  /*
-diff --git a/libarchive/archive_read_support_filter_program.c b/libarchive/archive_read_support_filter_program.c
-index b8bf128..7cce15f 100644
 --- a/libarchive/archive_read_support_filter_program.c
 +++ b/libarchive/archive_read_support_filter_program.c
 @@ -82,6 +82,8 @@ archive_read_support_filter_program(struct archive *a, const char *cmd)
@@ -343,8 +319,6 @@ index b8bf128..7cce15f 100644
  }
 +
 +#endif
-diff --git a/libarchive/archive_read_support_filter_xz.c b/libarchive/archive_read_support_filter_xz.c
-index 11807cf..856e08a 100644
 --- a/libarchive/archive_read_support_filter_xz.c
 +++ b/libarchive/archive_read_support_filter_xz.c
 @@ -754,6 +754,7 @@ xz_filter_close(struct archive_read_filter *self)
@@ -397,11 +371,29 @@ index 11807cf..856e08a 100644
  }
  
  #endif /* HAVE_LZMA_H */
-diff --git a/libarchive/archive_read_support_format_mtree.c b/libarchive/archive_read_support_format_mtree.c
-index 44b6083..2403451 100644
+--- a/libarchive/archive_read_support_filter_zstd.c
++++ b/libarchive/archive_read_support_filter_zstd.c
+@@ -143,6 +143,7 @@ zstd_bidder_bid(struct archive_read_filter_bidder *self,
+ static int
+ zstd_bidder_init(struct archive_read_filter *self)
+ {
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+ 	int r;
+ 
+ 	r = __archive_read_program(self, "zstd -d -qq");
+@@ -152,6 +153,9 @@ zstd_bidder_init(struct archive_read_filter *self)
+ 	self->code = ARCHIVE_FILTER_ZSTD;
+ 	self->name = "zstd";
+ 	return (r);
++#else
++    return ARCHIVE_FATAL;
++#endif
+ }
+ 
+ #else
 --- a/libarchive/archive_read_support_format_mtree.c
 +++ b/libarchive/archive_read_support_format_mtree.c
-@@ -53,6 +53,8 @@ __FBSDID("$FreeBSD: head/lib/libarchive/archive_read_support_format_mtree.c 2011
+@@ -57,6 +57,8 @@ __FBSDID("$FreeBSD: head/lib/libarchive/archive_read_support_format_mtree.c 2011
  #include "archive_string.h"
  #include "archive_pack_dev.h"
  
@@ -410,9 +402,9 @@ index 44b6083..2403451 100644
  #ifndef O_BINARY
  #define	O_BINARY 0
  #endif
-@@ -1978,3 +1980,11 @@ hash(const char *p)
+@@ -2022,3 +2024,11 @@ readline(struct archive_read *a, struct mtree *mtree, char **start,
+ 		find_off = u - mtree->line.s;
  	}
- 	return h;
  }
 +
 +#else
@@ -422,11 +414,9 @@ index 44b6083..2403451 100644
 +    return ARCHIVE_OK;
 +}
 +#endif
-diff --git a/libarchive/archive_string.c b/libarchive/archive_string.c
-index 5ae09b6..d88c376 100644
 --- a/libarchive/archive_string.c
 +++ b/libarchive/archive_string.c
-@@ -1311,7 +1311,7 @@ free_sconv_object(struct archive_string_conv *sc)
+@@ -1322,7 +1322,7 @@ free_sconv_object(struct archive_string_conv *sc)
  	free(sc);
  }
  
@@ -435,8 +425,6 @@ index 5ae09b6..d88c376 100644
  static unsigned
  my_atoi(const char *p)
  {
-diff --git a/libarchive/archive_util.c b/libarchive/archive_util.c
-index bac9ba1..aea2048 100644
 --- a/libarchive/archive_util.c
 +++ b/libarchive/archive_util.c
 @@ -209,7 +209,7 @@ __archive_errx(int retvalue, const char *msg)
@@ -462,11 +450,9 @@ index bac9ba1..aea2048 100644
  
  #else
  
-diff --git a/libarchive/archive_windows.h b/libarchive/archive_windows.h
-index e77cd08..487d5aa 100644
 --- a/libarchive/archive_windows.h
 +++ b/libarchive/archive_windows.h
-@@ -106,16 +106,20 @@
+@@ -106,13 +106,17 @@
  #define	lseek		__la_lseek
  #define __LA_LSEEK_NEEDED
  #endif
@@ -478,16 +464,13 @@ index e77cd08..487d5aa 100644
  #if !defined(__BORLANDC__) && !defined(__WATCOMC__)
  #define setmode		_setmode
  #endif
- #ifdef stat
- #undef stat
- #endif
 +#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
- #define	stat(path,stref)		__la_stat(path,stref)
+ #define	la_stat(path,stref)		__la_stat(path,stref)
 +#endif
  #if !defined(__WATCOMC__)
  #if !defined(__BORLANDC__)
  #define	strdup		_strdup
-@@ -125,8 +129,12 @@
+@@ -122,8 +126,12 @@
  #define	umask		_umask
  #endif
  #endif
@@ -500,7 +483,7 @@ index e77cd08..487d5aa 100644
  
  #if !defined(__WATCOMC__)
  
-@@ -266,7 +274,6 @@
+@@ -263,7 +271,6 @@
      #define	F_OK    0       /*  Test for existence of file  */
  #endif
  
@@ -508,7 +491,7 @@ index e77cd08..487d5aa 100644
  /* Replacement POSIX function */
  extern int	 __la_fstat(int fd, struct stat *st);
  extern int	 __la_lstat(const char *path, struct stat *st);
-@@ -279,8 +286,13 @@ extern int	 __la_stat(const char *path, struct stat *st);
+@@ -276,8 +283,13 @@ extern int	 __la_stat(const char *path, struct stat *st);
  extern pid_t	 __la_waitpid(HANDLE child, int *status, int option);
  extern ssize_t	 __la_write(int fd, const void *buf, size_t nbytes);
  
@@ -522,21 +505,17 @@ index e77cd08..487d5aa 100644
  /* for status returned by la_waitpid */
  #define WIFEXITED(sts)		((sts & 0x100) == 0)
  #define WEXITSTATUS(sts)	(sts & 0x0FF)
-diff --git a/libarchive/archive_write_add_filter_program.c b/libarchive/archive_write_add_filter_program.c
-index 660f693..8e2e5ea 100644
 --- a/libarchive/archive_write_add_filter_program.c
 +++ b/libarchive/archive_write_add_filter_program.c
-@@ -353,7 +353,7 @@ int
+@@ -348,7 +348,7 @@ int
  __archive_write_program_close(struct archive_write_filter *f,
      struct archive_write_program_data *data)
  {
--	int ret, r1, status;
-+	int ret, r1, status = 0;
+-	int ret, status;
++	int ret, status = 0;
  	ssize_t bytes_read;
  
  	if (data->child == 0)
-diff --git a/tar/CMakeLists.txt b/tar/CMakeLists.txt
-index 6434791..0b813d0 100644
 --- a/tar/CMakeLists.txt
 +++ b/tar/CMakeLists.txt
 @@ -24,10 +24,10 @@ IF(ENABLE_TAR)
@@ -552,6 +531,4 @@ index 6434791..0b813d0 100644
  
    # bsdtar documentation
    SET(bsdtar_MANS bsdtar.1)
--- 
-2.10.2.windows.1
 

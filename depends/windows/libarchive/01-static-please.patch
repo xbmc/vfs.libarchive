@@ -1,14 +1,15 @@
---- libarchive/libarchive/CMakeLists.txt
-+++ libarchive/libarchive/CMakeLists.txt
-@@ -224,23 +224,13 @@
+--- a/libarchive/CMakeLists.txt
++++ b/libarchive/CMakeLists.txt
+@@ -235,24 +235,15 @@ ELSEIF(ARCHIVE_ACL_SUNOS)
  ENDIF()
  
  # Libarchive is a shared library
 -ADD_LIBRARY(archive SHARED ${libarchive_SOURCES} ${include_HEADERS})
 +ADD_LIBRARY(archive STATIC ${libarchive_SOURCES} ${include_HEADERS})
+ TARGET_INCLUDE_DIRECTORIES(archive PUBLIC .)
  TARGET_LINK_LIBRARIES(archive ${ADDITIONAL_LIBS})
 -SET_TARGET_PROPERTIES(archive PROPERTIES SOVERSION ${SOVERSION})
--
+ 
 -# archive_static is a static library
 -ADD_LIBRARY(archive_static STATIC ${libarchive_SOURCES} ${include_HEADERS})
 -TARGET_LINK_LIBRARIES(archive_static ${ADDITIONAL_LIBS})
@@ -27,3 +28,4 @@
            RUNTIME DESTINATION bin
            LIBRARY DESTINATION lib
            ARCHIVE DESTINATION lib)
+

@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1901,6 +1901,9 @@
+@@ -1997,6 +1997,9 @@ ENDIF(WIN32 AND NOT CYGWIN)
  #
  #
  INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
