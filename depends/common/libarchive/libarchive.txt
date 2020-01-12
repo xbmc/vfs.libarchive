@@ -1,1 +1,1 @@
-libarchive https://www.libarchive.org/downloads/libarchive-3.3.2.tar.gz
+libarchive https://www.libarchive.org/downloads/libarchive-3.4.1.tar.gz

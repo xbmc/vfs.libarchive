@@ -1,8 +1,6 @@
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index bbbdb50..9ac0f0e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -403,11 +403,13 @@ IF(ZLIB_FOUND)
+@@ -422,11 +422,13 @@ IF(ZLIB_FOUND)
      #
      # Test if ZLIB_WINAPI macro is needed to use.
      #
@@ -21,6 +19,4 @@ index bbbdb50..9ac0f0e 100644
      IF(ZLIB_WINAPI)
        ADD_DEFINITIONS(-DZLIB_WINAPI)
      ELSE(ZLIB_WINAPI)
--- 
-2.10.2.windows.1
 
