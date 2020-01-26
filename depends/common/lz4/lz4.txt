@@ -1,1 +1,1 @@
-lz4 https://github.com/lz4/lz4/archive/v1.8.2.tar.gz
+lz4 https://github.com/lz4/lz4/archive/v1.9.2.tar.gz
