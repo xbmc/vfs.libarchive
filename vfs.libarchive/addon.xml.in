@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="vfs.libarchive"
-  version="1.1.0"
+  version="1.1.1"
   name="Archive support"
   provider-name="spiff">
   <requires>@ADDON_DEPENDS@</requires>
@@ -15,8 +15,17 @@
     encodedhostname="true"
     library_@PLATFORM@="@LIBRARY_FILENAME@" />
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Archive support</summary>
-    <description lang="en">Archive support</description>
+    <summary lang="en">Multi-format archive and compression addon</summary>
+    <description lang="en">This add-on uses the libarchive library to read a variety of archive and compression formats.
+
+Supported formats are:
+7z, tar.gz, tar.bz2, tar.xz, zip, rar, tgz, tbz2, gz, bz2, xz, cbr
+</description>
     <platform>@PLATFORM@</platform>
+    <license>GPL-2.0</license>
+    <source>https://github.com/xbmc/vfs.libarchive</source>
+    <assets>
+      <icon>resources/icon.png</icon>
+    </assets>
   </extension>
 </addon>

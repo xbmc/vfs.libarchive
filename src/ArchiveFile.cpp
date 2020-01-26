@@ -210,7 +210,7 @@ public:
 
   CArchiveFile(KODI_HANDLE instance) : CInstanceVFS(instance) { }
 
-  virtual void* Open(const VFSURL& url) override
+  void* Open(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
     if (!ctx->Open(url.hostname))
@@ -233,20 +233,27 @@ public:
     return nullptr;
   }
 
-  virtual ssize_t Read(void* context, void* buffer, size_t uiBufSize) override
+  ssize_t Read(void* context, void* buffer, size_t uiBufSize) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
       return 0;
 
-    ssize_t read = archive_read_data(ctx->ar, buffer, uiBufSize);
-    if (read > 0)
-      ctx->pos += read;
+    ssize_t read = 0;
+    while (1)
+    {
+      read = archive_read_data(ctx->ar, buffer, uiBufSize);
+      if (read == ARCHIVE_RETRY)
+        continue;
+      if (read > 0)
+        ctx->pos += read;
+      break;
+    }
 
     return read;
   }
 
-  virtual int64_t Seek(void* context, int64_t position, int whence) override
+  int64_t Seek(void* context, int64_t position, int whence) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
 
@@ -257,7 +264,7 @@ public:
     return ctx->pos;
   }
 
-  virtual int64_t GetLength(void* context) override
+  int64_t GetLength(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -266,7 +273,7 @@ public:
     return archive_entry_size(ctx->entry);
   }
 
-  virtual int64_t GetPosition(void* context) override
+  int64_t GetPosition(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -275,17 +282,17 @@ public:
     return ctx->pos;
   }
 
-  virtual int IoControl(void* context, XFILE::EIoControl request, void* param) override
+  int IoControl(void* context, XFILE::EIoControl request, void* param) override
   {
     return -1;
   }
 
-  virtual int Stat(const VFSURL& url, struct __stat64* buffer) override
+  int Stat(const VFSURL& url, struct __stat64* buffer) override
   {
     return -1;
   }
 
-  virtual bool Close(void* context) override
+  bool Close(void* context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx)
@@ -297,7 +304,7 @@ public:
     return true;
   }
 
-  virtual bool Exists(const VFSURL& url) override
+  bool Exists(const VFSURL& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
     if (!ctx->Open(url.hostname))
@@ -321,12 +328,12 @@ public:
     return false;
   }
 
-  virtual bool DirectoryExists(const VFSURL& url) override
+  bool DirectoryExists(const VFSURL& url) override
   {
     return false;
   }
 
-  virtual bool GetDirectory(const VFSURL& url,
+  bool GetDirectory(const VFSURL& url,
                             std::vector<kodi::vfs::CDirEntry>& items,
                             CVFSCallbacks callbacks) override
   {
@@ -344,7 +351,7 @@ public:
     return !items.empty();
   }
 
-  virtual bool ContainsFiles(const VFSURL& url,
+  bool ContainsFiles(const VFSURL& url,
                              std::vector<kodi::vfs::CDirEntry>& items,
                              std::string& rootpath) override
   {
@@ -399,8 +406,15 @@ private:
     std::set<std::string> folders;
     std::vector<std::string> rootSplit = splitString(subdir);
 
-    while (archive_read_next_header(ar, &entry) == ARCHIVE_OK)
+    int ret = ARCHIVE_OK;
+    while (1)
     {
+      ret = archive_read_next_header(ar, &entry);
+      if (ret != ARCHIVE_OK)
+        break;
+      if (ret == ARCHIVE_RETRY)
+        continue;
+
       std::string name = archive_entry_pathname_utf8(entry);
       std::vector<std::string> split = splitString(name);
       if (split.size() > rootSplit.size())
@@ -440,14 +454,112 @@ private:
       }
       archive_read_data_skip(ar);
     }
+
+    if (ret != ARCHIVE_OK && ret != ARCHIVE_EOF)
+    {
+      std::string errorString = archive_error_string(ar);
+      if (ret == ARCHIVE_WARN)
+      {
+        kodi::Log(ADDON_LOG_WARNING, "ListArchive generated: '%s'", errorString.c_str());
+        kodi::QueueFormattedNotification(QUEUE_WARNING, "%s", TranslateErrorString(errorString).c_str());
+      }
+      else if (ret == ARCHIVE_FAILED)
+      {
+        kodi::Log(ADDON_LOG_ERROR, "ListArchive generated: '%s'", errorString.c_str());
+        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s", TranslateErrorString(errorString).c_str());
+      }
+      else if (ret == ARCHIVE_FATAL)
+      {
+        kodi::Log(ADDON_LOG_FATAL, "ListArchive generated: '%s'", errorString.c_str());
+        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s", TranslateErrorString(errorString).c_str());
+      }
+    }
+  }
+
+  std::string TranslateErrorString(const std::string& errorString)
+  {
+    if (errorString == "RAR solid archive support unavailable.")
+    {
+      return kodi::GetLocalizedString(30000, errorString);
+    }
+    if (errorString == "Truncated RAR file data")
+    {
+      return kodi::GetLocalizedString(30001, errorString);
+    }
+    if (errorString == "Can't allocate rar data")
+    {
+      return kodi::GetLocalizedString(30002, errorString);
+    }
+    if (errorString == "Couldn't find out RAR header")
+    {
+      return kodi::GetLocalizedString(30003, errorString);
+    }
+    if (errorString == "Invalid marker header")
+    {
+      return kodi::GetLocalizedString(30004, errorString);
+    }
+    if (errorString == "Invalid header size" || errorString == "Invalid header size too small")
+    {
+      return kodi::GetLocalizedString(30005, errorString);
+    }
+    if (errorString == "RAR encryption support unavailable.")
+    {
+      return kodi::GetLocalizedString(30006, errorString);
+    }
+    if (errorString == "Header CRC error")
+    {
+      return kodi::GetLocalizedString(30007, errorString);
+    }
+    if (errorString == "Invalid sizes specified.")
+    {
+      return kodi::GetLocalizedString(30008, errorString);
+    }
+    if (errorString == "Bad RAR file")
+    {
+      return kodi::GetLocalizedString(30009, errorString);
+    }
+    if (errorString == "Unsupported compression method for RAR file.")
+    {
+      return kodi::GetLocalizedString(30010, errorString);
+    }
+    if (errorString == "Error during seek of RAR file")
+    {
+      return kodi::GetLocalizedString(30011, errorString);
+    }
+    if (errorString == "Invalid filename")
+    {
+      return kodi::GetLocalizedString(30012, errorString);
+    }
+    if (errorString == "Mismatch of file parts split across multi-volume archive")
+    {
+      return kodi::GetLocalizedString(30013, errorString);
+    }
+    if (errorString == "File CRC error")
+    {
+      return kodi::GetLocalizedString(30014, errorString);
+    }
+    if (errorString == "Parsing filters is unsupported.")
+    {
+      return kodi::GetLocalizedString(30015, errorString);
+    }
+    if (errorString == "Invalid symbol")
+    {
+      return kodi::GetLocalizedString(30016, errorString);
+    }
+    if (errorString == "Internal error extracting RAR file")
+    {
+      return kodi::GetLocalizedString(30017, errorString);
+    }
+
+    return errorString;
   }
 };
 
 class ATTRIBUTE_HIDDEN CMyAddon : public kodi::addon::CAddonBase
 {
 public:
-  CMyAddon() { }
-  virtual ADDON_STATUS CreateInstance(int instanceType, std::string instanceID, KODI_HANDLE instance, KODI_HANDLE& addonInstance) override
+  CMyAddon() = default;
+  ADDON_STATUS CreateInstance(int instanceType, std::string instanceID, KODI_HANDLE instance, KODI_HANDLE& addonInstance) override
   {
     addonInstance = new CArchiveFile(instance);
     return ADDON_STATUS_OK;
