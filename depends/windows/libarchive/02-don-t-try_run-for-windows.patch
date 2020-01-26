@@ -1,0 +1,22 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -422,11 +422,13 @@ IF(ZLIB_FOUND)
+     #
+     # Test if ZLIB_WINAPI macro is needed to use.
+     #
+-    TRY_MACRO_FOR_LIBRARY(
+-      "${ZLIB_INCLUDE_DIR}" "${ZLIB_LIBRARIES}"
+-      RUNS
+-      "#include <zlib.h>\nint main() {uLong f = zlibCompileFlags(); return (f&(1U<<10))?0:-1; }"
+-      ZLIB_WINAPI)
++    IF(NOT CMAKE_CROSSCOMPILING)
++      TRY_MACRO_FOR_LIBRARY(
++        "${ZLIB_INCLUDE_DIR}" "${ZLIB_LIBRARIES}"
++        RUNS
++        "#include <zlib.h>\nint main() {uLong f = zlibCompileFlags(); return (f&(1U<<10))?0:-1; }"
++        ZLIB_WINAPI)
++    ENDIF(NOT CMAKE_CROSSCOMPILING)
+     IF(ZLIB_WINAPI)
+       ADD_DEFINITIONS(-DZLIB_WINAPI)
+     ELSE(ZLIB_WINAPI)
+
