@@ -282,7 +282,7 @@ public:
     return ctx->pos;
   }
 
-  int IoControl(void* context, XFILE::EIoControl request, void* param) override
+  int IoControl(void* context, VFS_IOCTRL request, void* param) override
   {
     return -1;
   }
