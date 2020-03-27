@@ -22,7 +22,7 @@ Supported formats are:
 7z, tar.gz, tar.bz2, tar.xz, zip, rar, tgz, tbz2, gz, bz2, xz, cbr
 </description>
     <platform>@PLATFORM@</platform>
-    <license>GPL-2.0</license>
+    <license>GPL-2.0-or-later</license>
     <source>https://github.com/xbmc/vfs.libarchive</source>
     <assets>
       <icon>resources/icon.png</icon>
