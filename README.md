@@ -2,6 +2,7 @@
 
 This is a [Kodi](http://kodi.tv) VFS addon to support archives.
 
+[![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL%20v2+-blue.svg)](LICENSE.md)
 [![Build Status](https://travis-ci.org/xbmc/vfs.libarchive.svg?branch=Leia)](https://travis-ci.org/xbmc/vfs.libarchive/branches)
 [![Build Status](https://dev.azure.com/teamkodi/binary-addons/_apis/build/status/xbmc.vfs.libarchive?branchName=Leia)](https://dev.azure.com/teamkodi/binary-addons/_build/latest?definitionId=51&branchName=Leia)
 <!--- [![Build Status](https://ci.appveyor.com/api/projects/status/github/xbmc/vfs.libarchive?branch=Leia&svg=true)](https://ci.appveyor.com/project/xbmc/vfs-libarchive?branch=Leia) -->
