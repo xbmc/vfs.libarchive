@@ -15,8 +15,8 @@
     encodedhostname="true"
     library_@PLATFORM@="@LIBRARY_FILENAME@" />
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">Multi-format archive and compression addon</summary>
-    <description lang="en">This add-on uses the libarchive library to read a variety of archive and compression formats.
+    <summary lang="en_GB">Multi-format archive and compression addon</summary>
+    <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.
 
 Supported formats are:
 7z, tar.gz, tar.bz2, tar.xz, zip, rar, tgz, tbz2, gz, bz2, xz, cbr
