@@ -1,0 +1,39 @@
+--- a/libarchive/filter_fork_posix.c
++++ b/libarchive/filter_fork_posix.c
+@@ -72,6 +72,13 @@
+ 
+ #include "filter_fork.h"
+ 
++#include <TargetConditionals.h>
++
++#if TARGET_OS_TV
++#undef HAVE_POSIX_SPAWNP
++#undef HAVE_VFORK
++#endif
++
+ pid_t
+ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
+ {
+@@ -148,7 +155,11 @@
+ #if HAVE_VFORK
+ 	child = vfork();
+ #else
+-	child = fork();
++#ifdef TARGET_OS_TV
++       child = -1;
++#else
++       child = fork();
++#endif
+ #endif
+ 	if (child == -1)
+ 		goto stdout_opened;
+@@ -163,7 +174,9 @@
+ 			_exit(254);
+ 		if (stdout_pipe[1] != 1 /* stdout */)
+ 			close(stdout_pipe[1]);
++#ifndef TARGET_OS_TV
+ 		execvp(cmdline->path, cmdline->argv);
++#endif
+ 		_exit(254);
+ 	}
+ #endif /* HAVE_POSIX_SPAWNP */
