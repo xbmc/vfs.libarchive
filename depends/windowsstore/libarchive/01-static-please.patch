@@ -1,6 +1,6 @@
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -235,24 +235,15 @@ ELSEIF(ARCHIVE_ACL_SUNOS)
+@@ -236,24 +236,15 @@ ELSEIF(ARCHIVE_ACL_SUNOS)
  ENDIF()
  
  # Libarchive is a shared library

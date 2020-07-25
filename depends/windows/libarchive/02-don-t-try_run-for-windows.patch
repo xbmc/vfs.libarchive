@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -422,11 +422,13 @@ IF(ZLIB_FOUND)
+@@ -423,11 +423,13 @@ IF(ZLIB_FOUND)
      #
      # Test if ZLIB_WINAPI macro is needed to use.
      #
