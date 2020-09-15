@@ -5,10 +5,12 @@
   name="Archive support"
   provider-name="spiff">
   <requires>@ADDON_DEPENDS@</requires>
+  <!-- Note: .rar is partially supported by this addon, but since the other
+             addon vfs.rar also supports it, support is removed here. -->
   <extension
     point="kodi.vfs"
-    protocols="archive|rar"
-    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.rar|.tgz|.tbz2|.gz|.bz2|.xz|.cbr|.tar|.iso"
+    protocols="archive"
+    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.tgz|.tbz2|.gz|.bz2|.xz|.tar|.iso"
     files="true"
     directories="true"
     filedirectories="true"
@@ -19,7 +21,7 @@
     <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.
 
 Supported formats are:
-7z, tar.gz, tar.bz2, tar.xz, zip, rar, tgz, tbz2, gz, bz2, xz, cbr
+7z, tar.gz, tar.bz2, tar.xz, zip, tgz, tbz2, gz, bz2, xz
 </description>
     <platform>@PLATFORM@</platform>
     <license>GPL-2.0-or-later</license>
