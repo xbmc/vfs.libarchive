@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -236,7 +236,11 @@ IF(ENABLE_TEST)
+@@ -237,7 +237,11 @@ IF(ENABLE_TEST)
  ENDIF(ENABLE_TEST)
  
  IF(WIN32)
@@ -13,7 +13,7 @@
      SET(NTDDI_VERSION 0x06020000)
      SET(_WIN32_WINNT 0x0602)
      SET(WINVER 0x0602)
-@@ -260,12 +264,12 @@ IF(WIN32)
+@@ -261,12 +265,12 @@ IF(WIN32)
      SET(NTDDI_VERSION 0x05010000)
      SET(_WIN32_WINNT 0x0501)
      SET(WINVER 0x0501)
@@ -28,7 +28,7 @@
  ENDIF(WIN32)
  
  IF(MSVC)
-@@ -1358,8 +1362,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
+@@ -1390,8 +1394,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
  CHECK_FUNCTION_EXISTS_GLIBC(vfork HAVE_VFORK)
  CHECK_FUNCTION_EXISTS_GLIBC(wcrtomb HAVE_WCRTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(wcscmp HAVE_WCSCMP)
@@ -44,7 +44,7 @@
  CHECK_FUNCTION_EXISTS_GLIBC(wctomb HAVE_WCTOMB)
  CHECK_FUNCTION_EXISTS_GLIBC(_ctime64_s HAVE__CTIME64_S)
  CHECK_FUNCTION_EXISTS_GLIBC(_fseeki64 HAVE__FSEEKI64)
-@@ -1966,7 +1975,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
+@@ -2004,7 +2013,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
  # Libmd has to be probed after OpenSSL.
  CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA512" LIBMD)
  
@@ -55,7 +55,7 @@
  
  # Generate "config.h" from "build/cmake/config.h.in"
  CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/config.h.in
-@@ -1999,7 +2010,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
+@@ -2037,7 +2048,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
  INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
  #
  IF(MSVC)
@@ -63,7 +63,7 @@
 +  ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE)
  ENDIF(MSVC)
  
- IF(ENABLE_TEST)
+ IF(APPLE)
 --- a/cpio/CMakeLists.txt
 +++ b/cpio/CMakeLists.txt
 @@ -20,10 +20,10 @@ IF(ENABLE_CPIO)
@@ -81,7 +81,7 @@
    SET(bsdcpio_MANS bsdcpio.1)
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -210,14 +210,14 @@ SET(libarchive_MANS
+@@ -211,14 +211,14 @@ SET(libarchive_MANS
    tar.5
  )
  
@@ -304,16 +304,7 @@
  			/* Avoid infinity wait.
  			 * Note: If there is no data in the pipe, ReadFile()
  			 * called in read() never returns and so we won't
-@@ -437,7 +439,7 @@ __archive_read_program(struct archive_read_filter *self, const char *cmd)
- 		    cmd);
- 		return (ARCHIVE_FATAL);
- 	}
--#if defined(_WIN32) && !defined(__CYGWIN__)
-+#if defined(_WIN32) && !defined(__CYGWIN__) && WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
- 	state->child = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, child);
- 	if (state->child == NULL) {
- 		child_stop(self, state);
-@@ -516,3 +518,5 @@ program_filter_close(struct archive_read_filter *self)
+@@ -501,3 +503,5 @@ program_filter_close(struct archive_read_filter *self)
  
  	return (e);
  }
@@ -373,7 +364,7 @@
  #endif /* HAVE_LZMA_H */
 --- a/libarchive/archive_read_support_filter_zstd.c
 +++ b/libarchive/archive_read_support_filter_zstd.c
-@@ -143,6 +143,7 @@ zstd_bidder_bid(struct archive_read_filter_bidder *self,
+@@ -147,6 +147,7 @@ zstd_bidder_bid(struct archive_read_filter_bidder *self,
  static int
  zstd_bidder_init(struct archive_read_filter *self)
  {
@@ -381,7 +372,7 @@
  	int r;
  
  	r = __archive_read_program(self, "zstd -d -qq");
-@@ -152,6 +153,9 @@ zstd_bidder_init(struct archive_read_filter *self)
+@@ -156,6 +157,9 @@ zstd_bidder_init(struct archive_read_filter *self)
  	self->code = ARCHIVE_FILTER_ZSTD;
  	self->name = "zstd";
  	return (r);
@@ -402,7 +393,7 @@
  #ifndef O_BINARY
  #define	O_BINARY 0
  #endif
-@@ -2022,3 +2024,11 @@ readline(struct archive_read *a, struct mtree *mtree, char **start,
+@@ -2023,3 +2025,11 @@ readline(struct archive_read *a, struct mtree *mtree, char **start,
  		find_off = u - mtree->line.s;
  	}
  }
@@ -416,7 +407,7 @@
 +#endif
 --- a/libarchive/archive_string.c
 +++ b/libarchive/archive_string.c
-@@ -1322,7 +1322,7 @@ free_sconv_object(struct archive_string_conv *sc)
+@@ -1323,7 +1323,7 @@ free_sconv_object(struct archive_string_conv *sc)
  	free(sc);
  }
  
@@ -436,20 +427,27 @@
  /*
   * Do not use Windows tmpfile() function.
   * It will make a temporary file under the root directory
-@@ -361,6 +361,13 @@ exit_tmpfile:
- 	archive_wstring_free(&temp_name);
- 	return (fd);
+@@ -392,6 +392,20 @@ __archive_mkstemp(wchar_t *template)
+ 	return __archive_mktempx(NULL, template);
  }
+ 
 +#else
 +int
 +__archive_mktemp(const char *tmpdir)
 +{
 +    return -1;
 +}
++
++int
++__archive_mkstemp(wchar_t *template)
++{
++    return -1;
++}
 +#endif
- 
++
  #else
  
+ static int
 --- a/libarchive/archive_windows.h
 +++ b/libarchive/archive_windows.h
 @@ -106,13 +106,17 @@
@@ -507,7 +505,7 @@
  #define WEXITSTATUS(sts)	(sts & 0x0FF)
 --- a/libarchive/archive_write_add_filter_program.c
 +++ b/libarchive/archive_write_add_filter_program.c
-@@ -348,7 +348,7 @@ int
+@@ -330,7 +330,7 @@ int
  __archive_write_program_close(struct archive_write_filter *f,
      struct archive_write_program_data *data)
  {

@@ -11,10 +11,10 @@
 +#undef HAVE_VFORK
 +#endif
 +
- pid_t
- __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout)
- {
-@@ -148,7 +155,11 @@
+ int
+ __archive_create_child(const char *cmd, int *child_stdin, int *child_stdout,
+ 		pid_t *out_child)
+@@ -149,7 +156,11 @@
  #if HAVE_VFORK
  	child = vfork();
  #else
@@ -27,7 +27,7 @@
  #endif
  	if (child == -1)
  		goto stdout_opened;
-@@ -163,7 +174,9 @@
+@@ -164,7 +175,9 @@
  			_exit(254);
  		if (stdout_pipe[1] != 1 /* stdout */)
  			close(stdout_pipe[1]);

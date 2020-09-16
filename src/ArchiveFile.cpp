@@ -6,17 +6,18 @@
  *  See LICENSE.md for more information.
  */
 
-#include <kodi/addon-instance/VFS.h>
-#include <kodi/Filesystem.h>
-#include <kodi/General.h>
 #include <algorithm>
 #include <cctype>
+#include <kodi/Filesystem.h>
+#include <kodi/General.h>
+#include <kodi/addon-instance/VFS.h>
 #include <regex>
-#include <sstream>
 #include <set>
+#include <sstream>
 #include <string>
 
-extern "C" {
+extern "C"
+{
 #include <archive.h>
 #include <archive_entry.h>
 }
@@ -26,7 +27,7 @@ static std::string URLEncode(const std::string& strURLData)
   std::string strResult;
 
   /* wonder what a good value is here is, depends on how often it occurs */
-  strResult.reserve( strURLData.length() * 2 );
+  strResult.reserve(strURLData.length() * 2);
 
   for (size_t i = 0; i < strURLData.size(); ++i)
   {
@@ -34,12 +35,13 @@ static std::string URLEncode(const std::string& strURLData)
 
     // Don't URL encode "-_.!()" according to RFC1738
     //! @todo Update it to "-_.~" after Gotham according to RFC3986
-    if (std::isalnum(kar) || kar == '-' || kar == '.' || kar == '_' || kar == '!' || kar == '(' || kar == ')')
+    if (std::isalnum(kar) || kar == '-' || kar == '.' || kar == '_' || kar == '!' || kar == '(' ||
+        kar == ')')
       strResult.push_back(kar);
     else
     {
       char temp[128];
-      sprintf(temp,"%%%2.2x", (unsigned int)((unsigned char)kar));
+      sprintf(temp, "%%%2.2x", (unsigned int)((unsigned char)kar));
       strResult += temp;
     }
   }
@@ -86,14 +88,14 @@ class ATTRIBUTE_HIDDEN CArchiveFile : public kodi::addon::CInstanceVFS
         else
         {
           std::string nurl(url);
-          nurl[nurl.size()-2] = '0';
-          nurl[nurl.size()-1] = '0';
+          nurl[nurl.size() - 2] = '0';
+          nurl[nurl.size() - 1] = '0';
           if (kodi::vfs::FileExists(nurl.c_str(), true))
           {
             checkDir = true;
             oldStyle = true;
             fname = match[2].str();
-            fname.erase(fname.size()-3);
+            fname.erase(fname.size() - 3);
           }
         }
 
@@ -114,10 +116,9 @@ class ATTRIBUTE_HIDDEN CArchiveFile : public kodi::addon::CInstanceVFS
       if (cbs.empty())
         cbs.emplace_back(CbData(url));
 
-      auto&& CbSort = [](const CbData& d1, const CbData& d2) -> bool
-                      {
-                        return d2.url.compare(d1.url) > 0;
-                      };
+      auto&& CbSort = [](const CbData& d1, const CbData& d2) -> bool {
+        return d2.url.compare(d1.url) > 0;
+      };
 
       std::sort(cbs.begin(), cbs.end(), CbSort);
       if (oldStyle)
@@ -169,8 +170,7 @@ public:
   }
 
   //! \brief Read callback for VFS.
-  static la_ssize_t ArchiveRead(struct archive*,
-                                void* client_data, const void** buff)
+  static la_ssize_t ArchiveRead(struct archive*, void* client_data, const void** buff)
   {
     CbData* ctx = static_cast<CbData*>(client_data);
     *buff = ctx->buff.data();
@@ -179,8 +179,7 @@ public:
   }
 
   //! \brief Seek callback for VFS.
-  static la_int64_t ArchiveSeek(struct archive*, void* client_data,
-                                la_int64_t offset, int whence)
+  static la_int64_t ArchiveSeek(struct archive*, void* client_data, la_int64_t offset, int whence)
   {
     CbData* ctx = static_cast<CbData*>(client_data);
     return ctx->file.Seek(offset, whence);
@@ -196,12 +195,14 @@ public:
     return ARCHIVE_OK;
   }
 
-  CArchiveFile(KODI_HANDLE instance, const std::string& version) : CInstanceVFS(instance, version) { }
+  CArchiveFile(KODI_HANDLE instance, const std::string& version) : CInstanceVFS(instance, version)
+  {
+  }
 
-  void* Open(const VFSURL& url) override
+  kodi::addon::VFSFileHandle Open(const kodi::addon::VFSUrl& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    if (!ctx->Open(url.hostname))
+    if (!ctx->Open(url.GetHostname()))
     {
       delete ctx;
       return nullptr;
@@ -210,7 +211,7 @@ public:
     while (archive_read_next_header(ctx->ar, &ctx->entry) == ARCHIVE_OK)
     {
       std::string name = archive_entry_pathname_utf8(ctx->entry);
-      if (name == url.filename)
+      if (name == url.GetFilename())
         return ctx;
 
       archive_read_data_skip(ctx->ar);
@@ -221,7 +222,7 @@ public:
     return nullptr;
   }
 
-  ssize_t Read(void* context, void* buffer, size_t uiBufSize) override
+  ssize_t Read(kodi::addon::VFSFileHandle context, uint8_t* buffer, size_t uiBufSize) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -241,7 +242,7 @@ public:
     return read;
   }
 
-  int64_t Seek(void* context, int64_t position, int whence) override
+  int64_t Seek(kodi::addon::VFSFileHandle context, int64_t position, int whence) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
 
@@ -252,7 +253,7 @@ public:
     return ctx->pos;
   }
 
-  int64_t GetLength(void* context) override
+  int64_t GetLength(kodi::addon::VFSFileHandle context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -261,7 +262,7 @@ public:
     return archive_entry_size(ctx->entry);
   }
 
-  int64_t GetPosition(void* context) override
+  int64_t GetPosition(kodi::addon::VFSFileHandle context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx || !ctx->ar)
@@ -270,17 +271,9 @@ public:
     return ctx->pos;
   }
 
-  int IoControl(void* context, VFS_IOCTRL request, void* param) override
-  {
-    return -1;
-  }
+  int Stat(const kodi::addon::VFSUrl& url, kodi::vfs::FileStatus& buffer) override { return -1; }
 
-  int Stat(const VFSURL& url, struct __stat64* buffer) override
-  {
-    return -1;
-  }
-
-  bool Close(void* context) override
+  bool Close(kodi::addon::VFSFileHandle context) override
   {
     ArchiveCtx* ctx = static_cast<ArchiveCtx*>(context);
     if (!ctx)
@@ -292,60 +285,57 @@ public:
     return true;
   }
 
-  bool Exists(const VFSURL& url) override
+  bool Exists(const kodi::addon::VFSUrl& url) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    if (!ctx->Open(url.hostname))
+    if (!ctx->Open(url.GetHostname()))
     {
       delete ctx;
       return false;
     }
 
-    std::string encoded = URLEncode(url.hostname);
+    std::string encoded = URLEncode(url.GetHostname());
     std::vector<kodi::vfs::CDirEntry> items;
-    ListArchive(ctx->ar, "archive://"+encoded+"/", items, false, "");
+    ListArchive(ctx->ar, "archive://" + encoded + "/", items, false, "");
     archive_read_free(ctx->ar);
     delete ctx;
 
     for (kodi::vfs::CDirEntry& item : items)
     {
-      if (item.Path() == url.url)
+      if (item.Path() == url.GetURL())
         return true;
     }
 
     return false;
   }
 
-  bool DirectoryExists(const VFSURL& url) override
-  {
-    return false;
-  }
+  bool DirectoryExists(const kodi::addon::VFSUrl& url) override { return false; }
 
-  bool GetDirectory(const VFSURL& url,
-                            std::vector<kodi::vfs::CDirEntry>& items,
-                            CVFSCallbacks callbacks) override
+  bool GetDirectory(const kodi::addon::VFSUrl& url,
+                    std::vector<kodi::vfs::CDirEntry>& items,
+                    CVFSCallbacks callbacks) override
   {
     ArchiveCtx* ctx = new ArchiveCtx;
-    if (!ctx->Open(url.hostname))
+    if (!ctx->Open(url.GetHostname()))
     {
       delete ctx;
       return false;
     }
 
-    ListArchive(ctx->ar, url.url, items, false, url.filename);
+    ListArchive(ctx->ar, url.GetURL(), items, false, url.GetFilename());
     archive_read_free(ctx->ar);
     delete ctx;
 
     return !items.empty();
   }
 
-  bool ContainsFiles(const VFSURL& url,
-                             std::vector<kodi::vfs::CDirEntry>& items,
-                             std::string& rootpath) override
+  bool ContainsFiles(const kodi::addon::VFSUrl& url,
+                     std::vector<kodi::vfs::CDirEntry>& items,
+                     std::string& rootpath) override
   {
-    if (strstr(url.filename, ".rar"))
+    if (strstr(url.GetFilename().c_str(), ".rar"))
     {
-      std::string fname(url.filename);
+      std::string fname(url.GetFilename());
       size_t spos = fname.rfind('/');
       if (spos == std::string::npos)
         spos = fname.rfind('\\');
@@ -358,10 +348,10 @@ public:
           return false;
       }
     }
-    std::string encoded = URLEncode(url.url);
-    rootpath = "archive://"+encoded + "/";
+    std::string encoded = URLEncode(url.GetURL());
+    rootpath = "archive://" + encoded + "/";
     ArchiveCtx* ctx = new ArchiveCtx;
-    if (!ctx->Open(url.url))
+    if (!ctx->Open(url.GetURL()))
     {
       delete ctx;
       return false;
@@ -373,6 +363,7 @@ public:
 
     return !items.empty();
   }
+
 private:
   std::vector<std::string> splitString(const std::string& whole)
   {
@@ -385,7 +376,8 @@ private:
     return result;
   }
 
-  void ListArchive(struct archive* ar, const std::string& rootpath,
+  void ListArchive(struct archive* ar,
+                   const std::string& rootpath,
                    std::vector<kodi::vfs::CDirEntry>& items,
                    bool flat,
                    const std::string& subdir = "")
@@ -418,14 +410,13 @@ private:
           }
         }
 
-        if (flat ||
-            (match && folders.find(split[rootSplit.size()]) == folders.end()))
+        if (flat || (match && folders.find(split[rootSplit.size()]) == folders.end()))
         {
           kodi::vfs::CDirEntry kentry;
           std::string label = split[rootSplit.size()];
           std::string path = rootpath + split[rootSplit.size()];
           bool folder = false;
-          if (split.size() > rootSplit.size()+1 || name.back() == '/')
+          if (split.size() > rootSplit.size() + 1 || name.back() == '/')
           {
             path += '/';
             folder = true;
@@ -449,17 +440,20 @@ private:
       if (ret == ARCHIVE_WARN)
       {
         kodi::Log(ADDON_LOG_WARNING, "ListArchive generated: '%s'", errorString.c_str());
-        kodi::QueueFormattedNotification(QUEUE_WARNING, "%s", TranslateErrorString(errorString).c_str());
+        kodi::QueueFormattedNotification(QUEUE_WARNING, "%s",
+                                         TranslateErrorString(errorString).c_str());
       }
       else if (ret == ARCHIVE_FAILED)
       {
         kodi::Log(ADDON_LOG_ERROR, "ListArchive generated: '%s'", errorString.c_str());
-        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s", TranslateErrorString(errorString).c_str());
+        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s",
+                                         TranslateErrorString(errorString).c_str());
       }
       else if (ret == ARCHIVE_FATAL)
       {
         kodi::Log(ADDON_LOG_FATAL, "ListArchive generated: '%s'", errorString.c_str());
-        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s", TranslateErrorString(errorString).c_str());
+        kodi::QueueFormattedNotification(QUEUE_ERROR, "%s",
+                                         TranslateErrorString(errorString).c_str());
       }
     }
   }
@@ -547,7 +541,11 @@ class ATTRIBUTE_HIDDEN CMyAddon : public kodi::addon::CAddonBase
 {
 public:
   CMyAddon() = default;
-  ADDON_STATUS CreateInstance(int instanceType, const std::string& instanceID, KODI_HANDLE instance, const std::string& version, KODI_HANDLE& addonInstance) override
+  ADDON_STATUS CreateInstance(int instanceType,
+                              const std::string& instanceID,
+                              KODI_HANDLE instance,
+                              const std::string& version,
+                              KODI_HANDLE& addonInstance) override
   {
     addonInstance = new CArchiveFile(instance, version);
     return ADDON_STATUS_OK;

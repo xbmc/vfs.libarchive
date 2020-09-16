@@ -4,8 +4,7 @@ project(xz-utils)
 include(ExternalProject)
 externalproject_add(xz-utils
                     SOURCE_DIR ${CMAKE_SOURCE_DIR}
-                    UPDATE_COMMAND autoreconf -vif
-                    CONFIGURE_COMMAND <SOURCE_DIR>/configure 
+                    CONFIGURE_COMMAND <SOURCE_DIR>/configure
                       --prefix=${OUTPUT_DIR}
                       --enable-static
                       --disable-shared
