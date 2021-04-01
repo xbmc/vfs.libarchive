@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="vfs.libarchive"
-  version="2.0.0"
+  version="2.0.1"
   name="Archive support"
   provider-name="spiff">
   <requires>@ADDON_DEPENDS@</requires>
@@ -10,7 +10,7 @@
   <extension
     point="kodi.vfs"
     protocols="archive"
-    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.tgz|.tbz2|.gz|.bz2|.xz|.tar|.iso"
+    extensions=".7z|.tar.gz|.tar.bz2|.tar.xz|.zip|.tgz|.tbz2|.gz|.bz2|.xz|.tar"
     files="true"
     directories="true"
     filedirectories="true"
@@ -22,11 +22,11 @@
     <description lang="de_DE">Dieses Add-On verwendet die libarchive Bibliothek, um verschiedene Archiv- und Komprimierungsformate zu verarbeiten.
 
 Unterstützte Formate sind:
-7z, bz2, gz, iso, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.
 
 Supported formats are:
-7z, bz2, gz, iso, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <platform>@PLATFORM@</platform>
     <license>GPL-2.0-or-later</license>
     <source>https://github.com/xbmc/vfs.libarchive</source>
