@@ -27,9 +27,11 @@
     <summary lang="de_DE">Addon zur Verarbeitung mehrerer Archivformate</summary>
     <summary lang="en_GB">Multi-format archive and compression addon</summary>
     <summary lang="pl_PL">Dodatek wieloformatowych archiwów i kompresji</summary>
+    <summary lang="ru_RU">Дополнение для архивирования и сжатия в нескольких форматах</summary>
     <description lang="da_DK">Dette add-on anvender libarchive-biblioteket til at læse en række arkiv- og komprimeringsformater.[CR][CR]Understøttede formater er:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
     <description lang="de_DE">Dieses Add-On verwendet die libarchive Bibliothek, um verschiedene Archiv- und Komprimierungsformate zu verarbeiten.[CR][CR]Unterstützte Formate sind:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="pl_PL">Dodatek ten używa biblioteki libarchive do odczytu różnych formatów archiwów i kompresji.[CR][CR]Obsługiwane formaty to:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="ru_RU">Это дополнение использует библиотеку libarchive для чтения различных форматов архивов и сжатия.[CR][CR]Поддерживаемые форматы:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
   </extension>
 </addon>
