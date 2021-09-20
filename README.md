@@ -3,6 +3,7 @@
 This is a [Kodi](https://kodi.tv) VFS addon to support archives.
 
 [![License: GPL-2.0-or-later](https://img.shields.io/badge/License-GPL%20v2+-blue.svg)](LICENSE.md)
+[![Build and run tests](https://github.com/xbmc/vfs.libarchive/actions/workflows/build.yml/badge.svg?branch=Matrix)](https://github.com/xbmc/vfs.libarchive/actions/workflows/build.yml)
 [![Build Status](https://travis-ci.org/xbmc/vfs.libarchive.svg?branch=Matrix)](https://travis-ci.org/xbmc/vfs.libarchive/branches)
 [![Build Status](https://dev.azure.com/teamkodi/binary-addons/_apis/build/status/xbmc.vfs.libarchive?branchName=Matrix)](https://dev.azure.com/teamkodi/binary-addons/_build/latest?definitionId=51&branchName=Matrix)
 [![Build Status](https://jenkins.kodi.tv/view/Addons/job/xbmc/job/vfs.libarchive/job/Matrix/badge/icon)](https://jenkins.kodi.tv/blue/organizations/jenkins/xbmc%2Fvfs.libarchive/branches/)
