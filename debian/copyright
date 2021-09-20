@@ -3,7 +3,7 @@ Upstream-Name: vfs.libarchive
 Source: https://github.com/xbmc/vfs.libarchive
 
 Files: *
-Copyright: 2017-2020 Team Kodi
+Copyright: 2017-2021 Team Kodi
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ License: GPL-2+
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
 
 Files: debian/*
-Copyright: 2020 Team Kodi
+Copyright: 2020-2021 Team Kodi
            2017 Arne Morten Kvarving <spiff@kodi.tv>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
