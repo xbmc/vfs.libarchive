@@ -48,7 +48,7 @@ static std::string URLEncode(const std::string& strURLData)
   return strResult;
 }
 
-class ATTRIBUTE_HIDDEN CArchiveFile : public kodi::addon::CInstanceVFS
+class ATTR_DLL_LOCAL CArchiveFile : public kodi::addon::CInstanceVFS
 {
   struct CbData
   {
@@ -194,7 +194,7 @@ public:
     return ARCHIVE_OK;
   }
 
-  CArchiveFile(KODI_HANDLE instance, const std::string& version) : CInstanceVFS(instance, version)
+  CArchiveFile(const kodi::addon::IInstanceInfo& instance) : CInstanceVFS(instance)
   {
   }
 
@@ -461,92 +461,89 @@ private:
   {
     if (errorString == "RAR solid archive support unavailable.")
     {
-      return kodi::GetLocalizedString(30000, errorString);
+      return kodi::addon::GetLocalizedString(30000, errorString);
     }
     if (errorString == "Truncated RAR file data")
     {
-      return kodi::GetLocalizedString(30001, errorString);
+      return kodi::addon::GetLocalizedString(30001, errorString);
     }
     if (errorString == "Can't allocate rar data")
     {
-      return kodi::GetLocalizedString(30002, errorString);
+      return kodi::addon::GetLocalizedString(30002, errorString);
     }
     if (errorString == "Couldn't find out RAR header")
     {
-      return kodi::GetLocalizedString(30003, errorString);
+      return kodi::addon::GetLocalizedString(30003, errorString);
     }
     if (errorString == "Invalid marker header")
     {
-      return kodi::GetLocalizedString(30004, errorString);
+      return kodi::addon::GetLocalizedString(30004, errorString);
     }
     if (errorString == "Invalid header size" || errorString == "Invalid header size too small")
     {
-      return kodi::GetLocalizedString(30005, errorString);
+      return kodi::addon::GetLocalizedString(30005, errorString);
     }
     if (errorString == "RAR encryption support unavailable.")
     {
-      return kodi::GetLocalizedString(30006, errorString);
+      return kodi::addon::GetLocalizedString(30006, errorString);
     }
     if (errorString == "Header CRC error")
     {
-      return kodi::GetLocalizedString(30007, errorString);
+      return kodi::addon::GetLocalizedString(30007, errorString);
     }
     if (errorString == "Invalid sizes specified.")
     {
-      return kodi::GetLocalizedString(30008, errorString);
+      return kodi::addon::GetLocalizedString(30008, errorString);
     }
     if (errorString == "Bad RAR file")
     {
-      return kodi::GetLocalizedString(30009, errorString);
+      return kodi::addon::GetLocalizedString(30009, errorString);
     }
     if (errorString == "Unsupported compression method for RAR file.")
     {
-      return kodi::GetLocalizedString(30010, errorString);
+      return kodi::addon::GetLocalizedString(30010, errorString);
     }
     if (errorString == "Error during seek of RAR file")
     {
-      return kodi::GetLocalizedString(30011, errorString);
+      return kodi::addon::GetLocalizedString(30011, errorString);
     }
     if (errorString == "Invalid filename")
     {
-      return kodi::GetLocalizedString(30012, errorString);
+      return kodi::addon::GetLocalizedString(30012, errorString);
     }
     if (errorString == "Mismatch of file parts split across multi-volume archive")
     {
-      return kodi::GetLocalizedString(30013, errorString);
+      return kodi::addon::GetLocalizedString(30013, errorString);
     }
     if (errorString == "File CRC error")
     {
-      return kodi::GetLocalizedString(30014, errorString);
+      return kodi::addon::GetLocalizedString(30014, errorString);
     }
     if (errorString == "Parsing filters is unsupported.")
     {
-      return kodi::GetLocalizedString(30015, errorString);
+      return kodi::addon::GetLocalizedString(30015, errorString);
     }
     if (errorString == "Invalid symbol")
     {
-      return kodi::GetLocalizedString(30016, errorString);
+      return kodi::addon::GetLocalizedString(30016, errorString);
     }
     if (errorString == "Internal error extracting RAR file")
     {
-      return kodi::GetLocalizedString(30017, errorString);
+      return kodi::addon::GetLocalizedString(30017, errorString);
     }
 
     return errorString;
   }
 };
 
-class ATTRIBUTE_HIDDEN CMyAddon : public kodi::addon::CAddonBase
+class ATTR_DLL_LOCAL CMyAddon : public kodi::addon::CAddonBase
 {
 public:
   CMyAddon() = default;
-  ADDON_STATUS CreateInstance(int instanceType,
-                              const std::string& instanceID,
-                              KODI_HANDLE instance,
-                              const std::string& version,
-                              KODI_HANDLE& addonInstance) override
+  ADDON_STATUS CreateInstance(const kodi::addon::IInstanceInfo& instance,
+                              KODI_ADDON_INSTANCE_HDL& hdl) override
   {
-    addonInstance = new CArchiveFile(instance, version);
+    hdl = new CArchiveFile(instance);
     return ADDON_STATUS_OK;
   }
 };
