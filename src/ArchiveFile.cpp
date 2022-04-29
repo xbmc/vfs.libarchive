@@ -209,7 +209,12 @@ public:
 
     while (archive_read_next_header(ctx->ar, &ctx->entry) == ARCHIVE_OK)
     {
-      std::string name = archive_entry_pathname_utf8(ctx->entry);
+      std::string name;
+      if (archive_entry_pathname_utf8(ctx->entry))
+        name = archive_entry_pathname_utf8(ctx->entry);
+      else if (archive_entry_pathname(ctx->entry))
+        name = archive_entry_pathname(ctx->entry);
+
       if (name == url.GetFilename())
         return ctx;
 
@@ -394,7 +399,12 @@ private:
       if (ret == ARCHIVE_RETRY)
         continue;
 
-      std::string name = archive_entry_pathname_utf8(entry);
+      std::string name;
+      if (archive_entry_pathname_utf8(entry))
+        name = archive_entry_pathname_utf8(entry);
+      else if (archive_entry_pathname(entry))
+        name = archive_entry_pathname(entry);
+
       std::vector<std::string> split = splitString(name);
       if (split.size() > rootSplit.size())
       {
