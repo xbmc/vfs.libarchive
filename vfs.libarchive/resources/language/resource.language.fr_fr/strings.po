@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/vfs.libarchive/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-06-06 14:14+0000\n"
+"Last-Translator: skypichat <skypichat@hotmail.fr>\n"
+"Language-Team: French (France) <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/fr_fr/>\n"
 "Language: fr_fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 4.12.2\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr ""
+msgstr "Addon d'archivage et de compression multi-formats"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr ""
+msgstr "Ce module complémentaire utilise la bibliothèque libarchive pour lire une variété de formats d'archives et de compression.[CR][CR]Les formats pris en charge sont :[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -34,72 +35,72 @@ msgstr ""
 # Following strings used for addon settings dialog
 msgctxt "#30000"
 msgid "RAR solid archive support unavailable"
-msgstr ""
+msgstr "Prise en charge des archives solides RAR non disponible"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr ""
+msgstr "Données de fichier RAR tronquées"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr ""
+msgstr "Impossible d'allouer des données rar"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
-msgstr ""
+msgstr "Impossible de trouver l'en-tête RAR"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr ""
+msgstr "En-tête de marqueur non valide"
 
 msgctxt "#30005"
 msgid "Invalid header size"
-msgstr ""
+msgstr "Taille d'en-tête invalide"
 
 msgctxt "#30006"
 msgid "RAR encryption support unavailable"
-msgstr ""
+msgstr "Prise en charge du cryptage RAR indisponible"
 
 msgctxt "#30007"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Erreur d'en-tête CRC"
 
 msgctxt "#30008"
 msgid "Invalid sizes specified"
-msgstr ""
+msgstr "Tailles spécifiées non valides"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr ""
+msgstr "Mauvais fichier RAR"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
-msgstr ""
+msgstr "Méthode de compression non prise en charge pour le fichier RAR"
 
 msgctxt "#30011"
 msgid "Error during seek within RAR file"
-msgstr ""
+msgstr "Erreur lors de la recherche dans le fichier RAR"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr ""
+msgstr "Nom de fichier non valide"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr ""
+msgstr "Non-concordance des parties de fichiers réparties dans une archive multi-volumes"
 
 msgctxt "#30014"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Erreur d'en-tête CRC"
 
 msgctxt "#30015"
 msgid "Parsing filters is unsupported"
-msgstr ""
+msgstr "Les filtres d'analyse ne sont pas pris en charge"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr ""
+msgstr "Symbole invalide"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
-msgstr ""
+msgstr "Erreur interne lors de l'extraction du fichier RAR"
