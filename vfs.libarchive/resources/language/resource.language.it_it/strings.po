@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: KODI Main\n"
 "Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: 2022-08-18 22:14+0000\n"
+"PO-Revision-Date: 2022-12-20 14:15+0000\n"
 "Last-Translator: Massimo Pissarello <mapi68@gmail.com>\n"
 "Language-Team: Italian <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/it_it/>\n"
 "Language: it_it\n"
@@ -15,15 +15,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13\n"
+"X-Generator: Weblate 4.15\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr "Archivio multiformato e addon di compressione"
+msgstr "Archivio multiformato e Add-on di compressione"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr "Questo addon usa la libreria libarchive per leggere una varietà di formati di compressione e archivio.[CR][CR]I formati supportati sono:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip"
+msgstr "Questo Add-on usa la libreria libarchive per leggere una varietà di formati di compressione e archivio.[CR][CR]I formati supportati sono:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -39,11 +39,11 @@ msgstr "Supporto per l'archivio solido RAR non disponibile"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr "Dati da file RAR troncato"
+msgstr "Dati file RAR troncati"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr "Impossibile allocare dati rar"
+msgstr "Impossibile allocare dati RAR"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
@@ -51,7 +51,7 @@ msgstr "Impossibile trovare l'intestazione RAR"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr "Intestazione dell'indicatore non valida"
+msgstr "Intestazione indicatore non valida"
 
 msgctxt "#30005"
 msgid "Invalid header size"
@@ -71,7 +71,7 @@ msgstr "Dimensioni specificate non valide"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr "File RAR errato"
+msgstr "File RAR difettoso"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
@@ -83,11 +83,11 @@ msgstr "Errore durante la ricerca all'interno del file RAR"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr "Nome file non valido"
+msgstr "Nome del file non valido"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr "Mancata corrispondenza delle parti del file suddivise in un archivio a più volumi"
+msgstr "Mancata corrispondenza di parti di file suddivise nell'archivio multivolume"
 
 msgctxt "#30014"
 msgid "Header CRC error"
@@ -99,7 +99,7 @@ msgstr "I filtri di analisi non sono supportati"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr "Simbolo non valid"
+msgstr "Simbolo non valido"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
