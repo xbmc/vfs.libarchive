@@ -31,6 +31,7 @@
     <summary lang="es_MX">Complemento de compresión y archivado en múltiples formatos</summary>
     <summary lang="fi_FI">Lisäosa useiden arkistointi- ja pakkausmuotojen lukuun</summary>
     <summary lang="fr_FR">Addon d&apos;archivage et de compression multi-formats</summary>
+    <summary lang="hr_HR">Arhiva više formata i dodatak sažimanja</summary>
     <summary lang="it_IT">Archivio multiformato e Add-on di compressione</summary>
     <summary lang="ko_KR">다중 형식 아카이브 및 압축 애드온</summary>
     <summary lang="lv_LV">Vairāku formātu arhīva un saspiešanas papildinājums</summary>
@@ -46,7 +47,8 @@
     <description lang="es_ES">Este addon usa la libreria libarchive para leer varios formatos de compresión y archivado.[CR][CR]Los formatos soportados son:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="es_MX">Este complemento utiliza libarchive para leer una variedad de formatos de archivado y compresión. [CR][CR]Los formatos soportados son:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="fi_FI">Lisäosa käyttää libarchive-kirjastoa useiden arkoistointi- ja pakkausmuotojen lukuun.[CR][CR]Tuetut muodot ovat: [CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
-    <description lang="fr_FR">Ce module complémentaire utilise la bibliothèque libarchive pour lire une variété de formats d&apos;archives et de compression.[CR][CR]Les formats pris en charge sont :[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="fr_FR">Ce module complémentaire utilise la bibliothèque libarchive pour lire une variété de formats d&apos;archives et de compression.[CR][CR]Les formats pris en charge sont :[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
+    <description lang="hr_HR">Ovaj dodatak koristi libarchive biblioteku za čitanje raznih arhiva i sažetih formata.[CR][CR]Podržani formati su:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="it_IT">Questo Add-on usa la libreria libarchive per leggere una varietà di formati di compressione e archivio.[CR][CR]I formati supportati sono:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
     <description lang="ko_KR">이 추가 기능은 libarchive 라이브러리를 사용하여 다양한 아카이브 및 압축 형식을 읽습니다.[CR][CR]지원되는 형식은 다음과 같습니다.[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
     <description lang="lv_LV">Šis papildinājums izmanto libarchive bibliotēku, lai varētu lasīt un veikt dažādu arhīva formātu saspiešanu.[CR][CR]Atbalstītie formāti:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
