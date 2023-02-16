@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/vfs.libarchive/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-01-13 12:13+0000\n"
+"Last-Translator: Marius Lindvall <marius@varden.info>\n"
+"Language-Team: Norwegian Bokmål <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/nb_no/>\n"
 "Language: nb_no\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.10.1\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr ""
+msgstr "Multiformat arkiverings- og komprimeringsutvidelse"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr ""
+msgstr "Denne utvidelsen benytter libarchive-biblioteket til å lese en rekke arkiv- og komprimeringsformater.[CR][CR]Støttede formater er:[CR]7z, bz2, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -34,72 +35,72 @@ msgstr ""
 # Following strings used for addon settings dialog
 msgctxt "#30000"
 msgid "RAR solid archive support unavailable"
-msgstr ""
+msgstr "RAR solid arkivstøtte ikke tilgjengelig"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr ""
+msgstr "Avkortet RAR-fildata"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr ""
+msgstr "Kan ikke tildele rar-data"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
-msgstr ""
+msgstr "Kunne ikke finne RAR-hodet"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr ""
+msgstr "Ugyldig markørhode"
 
 msgctxt "#30005"
 msgid "Invalid header size"
-msgstr ""
+msgstr "Ugyldig hodestørrelse"
 
 msgctxt "#30006"
 msgid "RAR encryption support unavailable"
-msgstr ""
+msgstr "Støtte for RAR-kryptering er ikke tilgjengelig"
 
 msgctxt "#30007"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Hode-CRC-feil"
 
 msgctxt "#30008"
 msgid "Invalid sizes specified"
-msgstr ""
+msgstr "Ugyldige størrelser angitt"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr ""
+msgstr "Dårlig RAR-fil"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
-msgstr ""
+msgstr "Komprimeringsmetoden i RAR-filen støttes ikke"
 
 msgctxt "#30011"
 msgid "Error during seek within RAR file"
-msgstr ""
+msgstr "Feil under søking i RAR-fil"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr ""
+msgstr "Ugyldig filnavn"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr ""
+msgstr "Uoverensstemmelse mellom fildeler oppdelt mellom flere volumer i arkiv"
 
 msgctxt "#30014"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Hode-CRC-feil"
 
 msgctxt "#30015"
 msgid "Parsing filters is unsupported"
-msgstr ""
+msgstr "Analysering av filtre støttes ikke"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr ""
+msgstr "Ugyldig symbol"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
-msgstr ""
+msgstr "Intern feil ved utpakking av RAR-fil"
