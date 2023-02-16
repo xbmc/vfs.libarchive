@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/vfs.libarchive/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-07-23 14:14+0000\n"
+"Last-Translator: Oskari Lavinto <olavinto@protonmail.com>\n"
+"Language-Team: Finnish <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/fi_fi/>\n"
 "Language: fi_fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.13\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr ""
+msgstr "Lisäosa useiden arkistointi- ja pakkausmuotojen lukuun"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr ""
+msgstr "Lisäosa käyttää libarchive-kirjastoa useiden arkoistointi- ja pakkausmuotojen lukuun.[CR][CR]Tuetut muodot ovat: [CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -34,72 +35,72 @@ msgstr ""
 # Following strings used for addon settings dialog
 msgctxt "#30000"
 msgid "RAR solid archive support unavailable"
-msgstr ""
+msgstr "Tukea kiinteille RAR-tiedostoille ei ole"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr ""
+msgstr "Typistetyt RAR-tiedoston tiedot"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr ""
+msgstr "RAR-tiedoston tietoja ei voida koostaa"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
-msgstr ""
+msgstr "RAR-otsikkoa ei löytynyt"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr ""
+msgstr "Virheellinen merkintäotsikko"
 
 msgctxt "#30005"
 msgid "Invalid header size"
-msgstr ""
+msgstr "Virheellinen otsikkokoko"
 
 msgctxt "#30006"
 msgid "RAR encryption support unavailable"
-msgstr ""
+msgstr "RAR-salausta ei tueta"
 
 msgctxt "#30007"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Otsikon CRC-virhe"
 
 msgctxt "#30008"
 msgid "Invalid sizes specified"
-msgstr ""
+msgstr "Virheelliset kokomääritykset"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr ""
+msgstr "Epäkelpo RAR-tiedosto"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
-msgstr ""
+msgstr "Ei-tuettu pakkausmenetelmä RAR-tiedostolle"
 
 msgctxt "#30011"
 msgid "Error during seek within RAR file"
-msgstr ""
+msgstr "Virhe RAR-tiedoston sisäisessä haussa"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr ""
+msgstr "Virheellinen tiedostonimi"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr ""
+msgstr "Moniosoisen arkistotiedoston tiedosto-osat eivät täsmää"
 
 msgctxt "#30014"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Otsikon CRC-virhe"
 
 msgctxt "#30015"
 msgid "Parsing filters is unsupported"
-msgstr ""
+msgstr "Suodattimien jäsennystä ei tueta"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr ""
+msgstr "Virheellinen symboli"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
-msgstr ""
+msgstr "Sisäinen virhe purettaesa RAR-tiedostoa"

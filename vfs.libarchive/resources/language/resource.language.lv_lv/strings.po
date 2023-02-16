@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/vfs.libarchive/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2022-10-01 16:15+0000\n"
+"Last-Translator: Coool (github.com/Coool) <coool@mail.lv>\n"
+"Language-Team: Latvian <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/lv_lv/>\n"
 "Language: lv_lv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= 19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
+"X-Generator: Weblate 4.14.1\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr ""
+msgstr "Vairāku formātu arhīva un saspiešanas papildinājums"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr ""
+msgstr "Šis papildinājums izmanto libarchive bibliotēku, lai varētu lasīt un veikt dažādu arhīva formātu saspiešanu.[CR][CR]Atbalstītie formāti:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -34,72 +35,72 @@ msgstr ""
 # Following strings used for addon settings dialog
 msgctxt "#30000"
 msgid "RAR solid archive support unavailable"
-msgstr ""
+msgstr "Nepārtraukti RAR arhīvi netiek atbalstīti"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr ""
+msgstr "Saīsināti RAR faila dati"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr ""
+msgstr "Nevar atlasīt rar datus"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
-msgstr ""
+msgstr "Neizdevās atrast RAR galveni"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr ""
+msgstr "Nederīga marķiera galvene"
 
 msgctxt "#30005"
 msgid "Invalid header size"
-msgstr ""
+msgstr "Nederīgs galvenes izmērs"
 
 msgctxt "#30006"
 msgid "RAR encryption support unavailable"
-msgstr ""
+msgstr "RAR šifrēšanas atbalsts nav pieejams"
 
 msgctxt "#30007"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Galvenes CRC kļūda"
 
 msgctxt "#30008"
 msgid "Invalid sizes specified"
-msgstr ""
+msgstr "Norādīti nederīgi izmēri"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr ""
+msgstr "Bojāts RAR fails"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
-msgstr ""
+msgstr "RAR faila neatbalstīta saspiešanas metode"
 
 msgctxt "#30011"
 msgid "Error during seek within RAR file"
-msgstr ""
+msgstr "Kļūda, meklējot RAR failā"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr ""
+msgstr "Nederīgs faila nosaukums"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr ""
+msgstr "Faila daļu neatbilstība, kas sadalīta vairāku sējumu arhīvā"
 
 msgctxt "#30014"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Galvenes CRC kļūda"
 
 msgctxt "#30015"
 msgid "Parsing filters is unsupported"
-msgstr ""
+msgstr "Filtru izmantošana netiek atbalstīta"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr ""
+msgstr "Nederīga rakstzīme"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
-msgstr ""
+msgstr "Iekšēja kļūda, atarhivējot RAR failu"
