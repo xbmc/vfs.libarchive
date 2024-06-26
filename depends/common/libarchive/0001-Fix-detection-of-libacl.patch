@@ -1,0 +1,45 @@
+From d03a2d606bd2d4e41c9049c77741953fab801f57 Mon Sep 17 00:00:00 2001
+From: Garrett Brown <themagnificentmrb@gmail.com>
+Date: Sun, 26 May 2024 16:38:41 -0700
+Subject: [PATCH] Fix detection of libacl
+
+On Steam Deck, which currently ships acl version 2.3.1-3, CMake fails the
+check for acl library existence based on symbol resolution. Instead, just
+detect the acl library based on its filename.
+
+Fixes error:
+
+  CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+  Please set them or make sure they are set and tested correctly in the CMake files:
+  ACL_LIBRARY
+      linked by target "archive" in directory /home/deck/Documents/kodi/tools/depends/target/binary-addons/x86_64-steamdeck-linux-gnu-debug/build/libarchive/src/libarchive/libarchive
+
+  CMake Generate step failed.  Build files cannot be regenerated correctly.
+---
+ CMakeLists.txt | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b2634da6..765a373e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1786,12 +1786,13 @@ IF(ENABLE_ACL)
+   CHECK_FUNCTION_EXISTS(facl HAVE_FACL)
+ 
+   # Libacl
+-  CHECK_LIBRARY_EXISTS(acl "acl_get_file" "" HAVE_LIBACL)
+-  IF(HAVE_LIBACL)
++  FIND_LIBRARY(ACL_LIBRARY NAMES acl)
++  IF(ACL_LIBRARY)
++    SET(HAVE_LIBACL TRUE)
+     SET(CMAKE_REQUIRED_LIBRARIES "acl")
+     FIND_LIBRARY(ACL_LIBRARY NAMES acl)
+     LIST(APPEND ADDITIONAL_LIBS ${ACL_LIBRARY})
+-  ENDIF(HAVE_LIBACL)
++  ENDIF(ACL_LIBRARY)
+ 
+   CHECK_TYPE_EXISTS(acl_t "sys/types.h;sys/acl.h" HAVE_ACL_T)
+   CHECK_TYPE_EXISTS(acl_entry_t "sys/types.h;sys/acl.h" HAVE_ACL_ENTRY_T)
+-- 
+2.34.1
+
