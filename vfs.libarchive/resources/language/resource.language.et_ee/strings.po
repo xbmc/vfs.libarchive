@@ -5,24 +5,25 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: KODI Main\n"
-"Report-Msgid-Bugs-To: https://github.com/xbmc/vfs.libarchive/issues/\n"
+"Report-Msgid-Bugs-To: translations@kodi.tv\n"
 "POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-11-06 02:24+0000\n"
+"Last-Translator: rimasx <riks_12@hot.ee>\n"
+"Language-Team: Estonian <https://kodi.weblate.cloud/projects/kodi-add-ons-virtual-filesystems/vfs-libarchive/et_ee/>\n"
 "Language: et_ee\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8.2\n"
 
 msgctxt "Addon Summary"
 msgid "Multi-format archive and compression addon"
-msgstr ""
+msgstr "Lisamoodul mitme arhiveerimis- ja tihendusvormingu jaoks"
 
 msgctxt "Addon Description"
 msgid "This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip"
-msgstr ""
+msgstr "See lisamoodul kasutab erinevate arhiivi- ja tihendusvormingute lugemiseks libarchive teeki.[CR][CR]Toetatud vormingud on: [CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip"
 
 # [Consistency] Make terms, settings names, brands and other minutiae, consistent throughout file.
 # [Capitalization] Avoid capitalizing every second word. See http://grammarist.com/capitalization/
@@ -34,72 +35,72 @@ msgstr ""
 # Following strings used for addon settings dialog
 msgctxt "#30000"
 msgid "RAR solid archive support unavailable"
-msgstr ""
+msgstr "RAR-solid tugi puudub"
 
 msgctxt "#30001"
 msgid "Truncated RAR file data"
-msgstr ""
+msgstr "Kärbitud RAR-faili andmed"
 
 msgctxt "#30002"
 msgid "Can't allocate rar data"
-msgstr ""
+msgstr "Rar-andmeid ei saa eraldada"
 
 msgctxt "#30003"
 msgid "Couldn't find out RAR header"
-msgstr ""
+msgstr "RAR-i päist ei leitud"
 
 msgctxt "#30004"
 msgid "Invalid marker header"
-msgstr ""
+msgstr "Kehtetu päis"
 
 msgctxt "#30005"
 msgid "Invalid header size"
-msgstr ""
+msgstr "Vale päise suurus"
 
 msgctxt "#30006"
 msgid "RAR encryption support unavailable"
-msgstr ""
+msgstr "RAR-krüptimise tugi pole toetatud"
 
 msgctxt "#30007"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Päise CRC viga"
 
 msgctxt "#30008"
 msgid "Invalid sizes specified"
-msgstr ""
+msgstr "Valed suurused"
 
 msgctxt "#30009"
 msgid "Bad RAR file"
-msgstr ""
+msgstr "Kehv RAR-fail"
 
 msgctxt "#30010"
 msgid "Unsupported compression method for RAR file"
-msgstr ""
+msgstr "Toetuseta RAR-faili tihendusmeetod"
 
 msgctxt "#30011"
 msgid "Error during seek within RAR file"
-msgstr ""
+msgstr "Viga RAR-faili siseotsingul"
 
 msgctxt "#30012"
 msgid "Invalid filename"
-msgstr ""
+msgstr "Vigane failinimi"
 
 msgctxt "#30013"
 msgid "Mismatch of file parts split across multi-volume archive"
-msgstr ""
+msgstr "Mitmeosalise arhiivifaili failiosad ei ühti"
 
 msgctxt "#30014"
 msgid "Header CRC error"
-msgstr ""
+msgstr "Päise CRC viga"
 
 msgctxt "#30015"
 msgid "Parsing filters is unsupported"
-msgstr ""
+msgstr "Filtrite sõelumist ei toetata"
 
 msgctxt "#30016"
 msgid "Invalid symbol"
-msgstr ""
+msgstr "Kehtetu sümbol"
 
 msgctxt "#30017"
 msgid "Internal error extracting RAR file"
-msgstr ""
+msgstr "Sisemine viga RAR-faili lahtipakkimisel"
