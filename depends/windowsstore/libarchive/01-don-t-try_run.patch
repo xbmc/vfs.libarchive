@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -423,11 +423,13 @@ IF(ZLIB_FOUND)
+@@ -456,11 +456,13 @@
      #
      # Test if ZLIB_WINAPI macro is needed to use.
      #
@@ -19,4 +19,3 @@
      IF(ZLIB_WINAPI)
        ADD_DEFINITIONS(-DZLIB_WINAPI)
      ELSE(ZLIB_WINAPI)
-
