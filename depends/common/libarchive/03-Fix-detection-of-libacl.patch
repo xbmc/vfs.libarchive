@@ -16,14 +16,12 @@ Fixes error:
 
   CMake Generate step failed.  Build files cannot be regenerated correctly.
 ---
- CMakeLists.txt | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ CMakeLists.txt | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b2634da6..765a373e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1786,12 +1786,13 @@ IF(ENABLE_ACL)
+@@ -1946,8 +1946,9 @@
    CHECK_FUNCTION_EXISTS(facl HAVE_FACL)
  
    # Libacl
@@ -35,11 +33,15 @@ index b2634da6..765a373e 100644
      SET(CMAKE_REQUIRED_LIBRARIES "acl")
      FIND_LIBRARY(ACL_LIBRARY NAMES acl)
      LIST(APPEND ADDITIONAL_LIBS ${ACL_LIBRARY})
+@@ -1955,9 +1956,9 @@
+ 	  IF(LIBACL_VERSION)
+ 	    SET(LIBACL_PKGCONFIG_VERSION ${LIBACL_VERSION})
+ 	  ENDIF(LIBACL_VERSION)
+-  ELSE(HAVE_LIBACL)
++  ELSE(ACL_LIBRARY)
+     UNSET(LIBACL_PKGCONFIG_VERSION CACHE)
 -  ENDIF(HAVE_LIBACL)
 +  ENDIF(ACL_LIBRARY)
  
    CHECK_TYPE_EXISTS(acl_t "sys/types.h;sys/acl.h" HAVE_ACL_T)
    CHECK_TYPE_EXISTS(acl_entry_t "sys/types.h;sys/acl.h" HAVE_ACL_ENTRY_T)
--- 
-2.34.1
-

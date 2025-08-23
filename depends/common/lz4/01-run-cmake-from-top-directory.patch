@@ -1,11 +1,11 @@
---- a/contrib/cmake_unofficial/CMakeLists.txt
-+++ b/contrib/cmake_unofficial/CMakeLists.txt
+--- a/build/cmake/CMakeLists.txt
++++ b/build/cmake/CMakeLists.txt
 @@ -10,7 +10,7 @@
- # LZ4's CMake support is maintained by Evan Nemerson; when filing
- # bugs please mention @nemequ to make sure I see it.
+ 
+ cmake_minimum_required(VERSION 3.5)
  
 -set(LZ4_TOP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../..")
 +set(LZ4_TOP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
  
- option(LZ4_BUILD_LEGACY_LZ4C "Build lz4c progam with legacy argument support" ON)
- 
+ # Parse version information
+ function(parse_lz4_version VERSION_TYPE)

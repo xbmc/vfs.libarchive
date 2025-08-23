@@ -1,6 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1997,6 +1997,9 @@ ENDIF(WIN32 AND NOT CYGWIN)
+@@ -2218,6 +2218,9 @@
  #
  #
  INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
@@ -12,7 +12,7 @@
    ADD_DEFINITIONS(-D_CRT_SECURE_NO_DEPRECATE)
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -9,6 +9,7 @@
+@@ -13,6 +13,7 @@
  SET(include_HEADERS
    archive.h
    archive_entry.h

@@ -1,25 +1,39 @@
-cmake_minimum_required(VERSION 3.5)
-project(openssl)
+cmake_minimum_required(VERSION 3.15)
+
+project(openssl VERSION 3.5.2 LANGUAGES C)
+
+find_package(StrawberryPerl REQUIRED)
 
 include(CheckSymbolExists)
 check_symbol_exists(_X86_ "Windows.h" _X86_)
-check_symbol_exists(_AMD64_ "Windows.h" _X64_)
-check_symbol_exists(_ARM_ "Windows.h" _ARM_)
+check_symbol_exists(_AMD64_ "Windows.h" _AMD64_)
 check_symbol_exists(_ARM64_ "Windows.h" _ARM64_)
 
 if(_X86_)
-  set(OPENSSL_ARCHIVE_NAME openssl-1.1.1d-win10-win32-v141-20200105)
-elseif(_X64_)
-  set(OPENSSL_ARCHIVE_NAME openssl-1.1.1d-win10-x64-v141-20200105)
-elseif(_ARM_)
-  set(OPENSSL_ARCHIVE_NAME openssl-1.1.1d-win10-arm-v141-20200105)
+	message(STATUS "Win32")
+	set(OPENSSL_PLATFORM VC-WIN32)
+elseif(_AMD64_)
+	message(STATUS "x64")
+	set(OPENSSL_PLATFORM VC-WIN64A)
 elseif(_ARM64_)
-  set(OPENSSL_ARCHIVE_NAME openssl-1.1.1d-win10-arm64-v141-20200105)
+	message(STATUS "arm64")
+	set(OPENSSL_PLATFORM VC-WIN64-ARM)
 else()
-  message(FATAL_ERROR "Unsupported architecture")
+	message(FATAL_ERROR "Unsupported target architecture")
 endif()
 
-message(STATUS "Downloading http://mirrors.kodi.tv/build-deps/win32/${OPENSSL_ARCHIVE_NAME}.7z")
-file(DOWNLOAD http://mirrors.kodi.tv/build-deps/win32/${OPENSSL_ARCHIVE_NAME}.7z ${CMAKE_CURRENT_BINARY_DIR}/${OPENSSL_ARCHIVE_NAME}.7z SHOW_PROGRESS)
-execute_process(COMMAND ${CMAKE_COMMAND} -E tar xzvf ${OPENSSL_ARCHIVE_NAME}.7z WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${OPENSSL_ARCHIVE_NAME}/ DESTINATION ${CMAKE_INSTALL_PREFIX})
+if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
+	set(OPENSSL_PLATFORM "${OPENSSL_PLATFORM}-UWP")
+endif()
+
+set(configure_options no-shared no-asm no-apps no-tests no-ui-console zlib --prefix=${CMAKE_INSTALL_PREFIX} --with-zlib-include=${OUTPUT_DIR}/include)
+
+set(ENV{PATH} "${STRAWBERRYPERL_PATH};$ENV{PATH}")
+execute_process(COMMAND perl Configure ${OPENSSL_PLATFORM} ${configure_options}
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMAND_ECHO STDOUT)
+
+add_custom_target(openssl ALL COMMAND nmake build_generated libcrypto.lib libssl.lib WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+
+install(DIRECTORY include/openssl DESTINATION include/ FILES_MATCHING PATTERN "*.h")
+install(FILES libcrypto.lib libssl.lib DESTINATION lib/)

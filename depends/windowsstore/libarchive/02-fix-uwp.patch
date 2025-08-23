@@ -1,50 +1,34 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -237,7 +237,11 @@ IF(ENABLE_TEST)
+@@ -268,10 +268,10 @@
  ENDIF(ENABLE_TEST)
  
  IF(WIN32)
--  IF(WINDOWS_VERSION STREQUAL "WIN8")
+-  IF(WINDOWS_VERSION STREQUAL "WIN10")
 +  IF(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
-+    SET(NTDDI_VERSION 0x0A000000)
-+    SET(_WIN32_WINNT 0x0A00)
+     SET(NTDDI_VERSION 0x0A000000)
+     SET(_WIN32_WINNT 0x0A00)
+-    SET(WINVER 0x0A00)
 +    SET(WINVER 0x0602)
-+  ELSEIF(WINDOWS_VERSION STREQUAL "WIN8")
+   ELSEIF(WINDOWS_VERSION STREQUAL "WIN8")
      SET(NTDDI_VERSION 0x06020000)
      SET(_WIN32_WINNT 0x0602)
-     SET(WINVER 0x0602)
-@@ -261,12 +265,12 @@ IF(WIN32)
-     SET(NTDDI_VERSION 0x05010000)
-     SET(_WIN32_WINNT 0x0501)
-     SET(WINVER 0x0501)
--  ELSE(WINDOWS_VERSION STREQUAL "WIN8")
+@@ -284,12 +284,12 @@
+     SET(NTDDI_VERSION 0x06000100)
+     SET(_WIN32_WINNT 0x0600)
+     SET(WINVER 0x0600)
+-  ELSE(WINDOWS_VERSION STREQUAL "WIN10")
 +  ELSE(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
      # Default to Windows Server 2003 API if we don't recognize the specifier
      SET(NTDDI_VERSION 0x05020000)
      SET(_WIN32_WINNT 0x0502)
      SET(WINVER 0x0502)
--  ENDIF(WINDOWS_VERSION STREQUAL "WIN8")
+-  ENDIF(WINDOWS_VERSION STREQUAL "WIN10")
 +  ENDIF(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
  ENDIF(WIN32)
  
  IF(MSVC)
-@@ -1390,8 +1394,13 @@ CHECK_FUNCTION_EXISTS_GLIBC(utimensat HAVE_UTIMENSAT)
- CHECK_FUNCTION_EXISTS_GLIBC(vfork HAVE_VFORK)
- CHECK_FUNCTION_EXISTS_GLIBC(wcrtomb HAVE_WCRTOMB)
- CHECK_FUNCTION_EXISTS_GLIBC(wcscmp HAVE_WCSCMP)
--CHECK_FUNCTION_EXISTS_GLIBC(wcscpy HAVE_WCSCPY)
--CHECK_FUNCTION_EXISTS_GLIBC(wcslen HAVE_WCSLEN)
-+IF(NOT CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
-+  CHECK_FUNCTION_EXISTS_GLIBC(wcscpy HAVE_WCSCPY)
-+  CHECK_FUNCTION_EXISTS_GLIBC(wcslen HAVE_WCSLEN)
-+ELSE()
-+  SET(HAVE_WCSCPY 1)
-+  SET(HAVE_WCSLEN 1)
-+ENDIF(NOT CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
- CHECK_FUNCTION_EXISTS_GLIBC(wctomb HAVE_WCTOMB)
- CHECK_FUNCTION_EXISTS_GLIBC(_ctime64_s HAVE__CTIME64_S)
- CHECK_FUNCTION_EXISTS_GLIBC(_fseeki64 HAVE__FSEEKI64)
-@@ -2004,7 +2013,9 @@ CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA384;SHA512" OPENSSL)
+@@ -2178,7 +2178,9 @@
  # Libmd has to be probed after OpenSSL.
  CHECK_CRYPTO("MD5;RMD160;SHA1;SHA256;SHA512" LIBMD)
  
@@ -53,9 +37,9 @@
 +  CHECK_CRYPTO_WIN("MD5;SHA1;SHA256;SHA384;SHA512")
 +ENDIF(NOT CMAKE_SYSTEM_NAME STREQUAL WindowsStore)
  
- # Generate "config.h" from "build/cmake/config.h.in"
- CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/build/cmake/config.h.in
-@@ -2037,7 +2048,7 @@ ENDIF(WIN32 AND NOT CYGWIN)
+ # Check visibility annotations
+ SET(OLD_CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS}")
+@@ -2222,7 +2224,7 @@
  INCLUDE_DIRECTORIES(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/libarchive)
  #
  IF(MSVC)
@@ -63,10 +47,10 @@
 +  ADD_DEFINITIONS(-D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_SECURE_NO_DEPRECATE)
  ENDIF(MSVC)
  
- IF(APPLE)
+ OPTION(DONT_FAIL_ON_CRC_ERROR "Ignore CRC errors during parsing (For fuzzing)" OFF)
 --- a/cpio/CMakeLists.txt
 +++ b/cpio/CMakeLists.txt
-@@ -20,10 +20,10 @@ IF(ENABLE_CPIO)
+@@ -23,10 +23,10 @@
    )
    INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/test_utils)
    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libarchive_fe)
@@ -81,7 +65,7 @@
    SET(bsdcpio_MANS bsdcpio.1)
 --- a/libarchive/CMakeLists.txt
 +++ b/libarchive/CMakeLists.txt
-@@ -211,14 +211,14 @@ SET(libarchive_MANS
+@@ -219,14 +219,14 @@
    tar.5
  )
  
@@ -100,49 +84,44 @@
    LIST(APPEND libarchive_SOURCES archive_blake2sp_ref.c)
 --- a/libarchive/archive_check_magic.c
 +++ b/libarchive/archive_check_magic.c
-@@ -67,7 +67,11 @@ diediedie(void)
+@@ -66,7 +66,11 @@
  {
  #if defined(_WIN32) && !defined(__CYGWIN__) && defined(_DEBUG)
  	/* Cause a breakpoint exception  */
--	DebugBreak();
 +#if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_APP)
-+  __debugbreak();
++	__debugbreak();
 +#else
-+  DebugBreak();
+ 	DebugBreak();
 +#endif
  #endif
  	abort();        /* Terminate the program abnormally. */
  }
 --- a/libarchive/archive_entry.h
 +++ b/libarchive/archive_entry.h
-@@ -303,7 +303,7 @@ __LA_DECL int archive_entry_is_encrypted(struct archive_entry *);
+@@ -342,7 +342,7 @@
  
- __LA_DECL void	archive_entry_set_atime(struct archive_entry *, time_t, long);
+ __LA_DECL void	archive_entry_set_atime(struct archive_entry *, __LA_TIME_T, long);
  __LA_DECL void  archive_entry_unset_atime(struct archive_entry *);
 -#if defined(_WIN32) && !defined(__CYGWIN__)
 +#if defined(_WIN32) && !defined(__CYGWIN__) && WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
  __LA_DECL void archive_entry_copy_bhfi(struct archive_entry *, BY_HANDLE_FILE_INFORMATION *);
  #endif
- __LA_DECL void	archive_entry_set_birthtime(struct archive_entry *, time_t, long);
+ __LA_DECL void	archive_entry_set_birthtime(struct archive_entry *, __LA_TIME_T, long);
 --- a/libarchive/archive_random.c
 +++ b/libarchive/archive_random.c
-@@ -70,7 +70,7 @@ static void arc4random_buf(void *, size_t);
-  * Random number generator function.
-  * This simply calls arc4random_buf function if the platform provides it.
-  */
--
-+#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY != WINAPI_FAMILY_APP)
+@@ -84,6 +84,7 @@
  int
  archive_random(void *buf, size_t nbytes)
  {
-@@ -97,6 +97,25 @@ archive_random(void *buf, size_t nbytes)
++#if !defined(WINAPI_FAMILY) || (WINAPI_FAMILY != WINAPI_FAMILY_APP)
+ #if defined(_WIN32) && !defined(__CYGWIN__)
+ # if defined(HAVE_BCRYPT_H) && _WIN32_WINNT >= _WIN32_WINNT_VISTA
+ 	NTSTATUS status;
+@@ -124,6 +125,21 @@
+ 	arc4random_buf(buf, nbytes);
  	return ARCHIVE_OK;
  #endif
- }
 +#else
-+int
-+archive_random(void *buf, size_t nbytes)
-+{
 +  BCRYPT_ALG_HANDLE hProv;
 +
 +  NTSTATUS success = BCryptOpenAlgorithmProvider(&hProv, BCRYPT_RSA_ALGORITHM, 0, 0);
@@ -156,14 +135,13 @@
 +      return ARCHIVE_OK;
 +  }
 +  return ARCHIVE_FAILED;
-+}
 +#endif
+ }
  
  #if !defined(HAVE_ARC4RANDOM_BUF) && (!defined(_WIN32) || defined(__CYGWIN__))
- 
 --- a/libarchive/archive_read_support_filter_bzip2.c
 +++ b/libarchive/archive_read_support_filter_bzip2.c
-@@ -169,6 +169,7 @@ bzip2_reader_bid(struct archive_read_filter_bidder *self, struct archive_read_fi
+@@ -157,6 +157,7 @@
  static int
  bzip2_reader_init(struct archive_read_filter *self)
  {
@@ -171,7 +149,7 @@
  	int r;
  
  	r = __archive_read_program(self, "bzip2 -d");
-@@ -178,6 +179,9 @@ bzip2_reader_init(struct archive_read_filter *self)
+@@ -166,6 +167,9 @@
  	self->code = ARCHIVE_FILTER_BZIP2;
  	self->name = "bzip2";
  	return (r);
@@ -183,7 +161,7 @@
  
 --- a/libarchive/archive_read_support_filter_grzip.c
 +++ b/libarchive/archive_read_support_filter_grzip.c
-@@ -109,6 +109,7 @@ grzip_bidder_bid(struct archive_read_filter_bidder *self,
+@@ -97,6 +97,7 @@
  static int
  grzip_bidder_init(struct archive_read_filter *self)
  {
@@ -191,7 +169,7 @@
  	int r;
  
  	r = __archive_read_program(self, "grzip -d");
-@@ -118,4 +119,7 @@ grzip_bidder_init(struct archive_read_filter *self)
+@@ -106,4 +107,7 @@
  	self->code = ARCHIVE_FILTER_GRZIP;
  	self->name = "grzip";
  	return (r);
@@ -201,7 +179,7 @@
  }
 --- a/libarchive/archive_read_support_filter_lrzip.c
 +++ b/libarchive/archive_read_support_filter_lrzip.c
-@@ -120,6 +120,7 @@ lrzip_bidder_bid(struct archive_read_filter_bidder *self,
+@@ -107,6 +107,7 @@
  static int
  lrzip_bidder_init(struct archive_read_filter *self)
  {
@@ -209,7 +187,7 @@
  	int r;
  
  	r = __archive_read_program(self, "lrzip -d -q");
-@@ -129,4 +130,7 @@ lrzip_bidder_init(struct archive_read_filter *self)
+@@ -116,4 +117,7 @@
  	self->code = ARCHIVE_FILTER_LRZIP;
  	self->name = "lrzip";
  	return (r);
@@ -219,7 +197,7 @@
  }
 --- a/libarchive/archive_read_support_filter_lz4.c
 +++ b/libarchive/archive_read_support_filter_lz4.c
-@@ -204,6 +204,7 @@ lz4_reader_bid(struct archive_read_filter_bidder *self,
+@@ -192,6 +192,7 @@
  static int
  lz4_reader_init(struct archive_read_filter *self)
  {
@@ -227,7 +205,7 @@
  	int r;
  
  	r = __archive_read_program(self, "lz4 -d -q");
-@@ -213,6 +214,9 @@ lz4_reader_init(struct archive_read_filter *self)
+@@ -201,6 +202,9 @@
  	self->code = ARCHIVE_FILTER_LZ4;
  	self->name = "lz4";
  	return (r);
@@ -239,7 +217,7 @@
  
 --- a/libarchive/archive_read_support_filter_lzop.c
 +++ b/libarchive/archive_read_support_filter_lzop.c
-@@ -160,6 +160,7 @@ lzop_bidder_bid(struct archive_read_filter_bidder *self,
+@@ -156,6 +156,7 @@
  static int
  lzop_bidder_init(struct archive_read_filter *self)
  {
@@ -247,7 +225,7 @@
  	int r;
  
  	r = __archive_read_program(self, "lzop -d");
-@@ -169,6 +170,9 @@ lzop_bidder_init(struct archive_read_filter *self)
+@@ -165,6 +166,9 @@
  	self->code = ARCHIVE_FILTER_LZOP;
  	self->name = "lzop";
  	return (r);
@@ -256,10 +234,10 @@
 +#endif
  }
  #else
- /*
+ 
 --- a/libarchive/archive_read_support_filter_program.c
 +++ b/libarchive/archive_read_support_filter_program.c
-@@ -82,6 +82,8 @@ archive_read_support_filter_program(struct archive *a, const char *cmd)
+@@ -81,6 +81,8 @@
  	return (archive_read_support_filter_program_signature(a, cmd, NULL, 0));
  }
  
@@ -268,7 +246,7 @@
  /*
   * The bidder object stores the command and the signature to watch for.
   * The 'inhibit' entry here is used to ensure that unchecked filters never
-@@ -105,7 +107,7 @@ static int	program_bidder_free(struct archive_read_filter_bidder *);
+@@ -104,7 +106,7 @@
   */
  struct program_filter {
  	struct archive_string description;
@@ -277,7 +255,7 @@
  	HANDLE		 child;
  #else
  	pid_t		 child;
-@@ -254,7 +256,7 @@ child_stop(struct archive_read_filter *self, struct program_filter *state)
+@@ -242,7 +244,7 @@
  			state->waitpid_return
  			    = waitpid(state->child, &state->exit_status, 0);
  		} while (state->waitpid_return == -1 && errno == EINTR);
@@ -286,7 +264,7 @@
  		CloseHandle(state->child);
  #endif
  		state->child = 0;
-@@ -309,7 +311,7 @@ child_read(struct archive_read_filter *self, char *buf, size_t buf_len)
+@@ -297,7 +299,7 @@
  	struct program_filter *state = self->data;
  	ssize_t ret, requested, avail;
  	const char *p;
@@ -295,7 +273,7 @@
  	HANDLE handle = (HANDLE)_get_osfhandle(state->child_stdout);
  #endif
  
-@@ -317,7 +319,7 @@ child_read(struct archive_read_filter *self, char *buf, size_t buf_len)
+@@ -305,7 +307,7 @@
  
  	for (;;) {
  		do {
@@ -304,7 +282,7 @@
  			/* Avoid infinity wait.
  			 * Note: If there is no data in the pipe, ReadFile()
  			 * called in read() never returns and so we won't
-@@ -501,3 +503,5 @@ program_filter_close(struct archive_read_filter *self)
+@@ -493,3 +495,5 @@
  
  	return (e);
  }
@@ -312,7 +290,7 @@
 +#endif
 --- a/libarchive/archive_read_support_filter_xz.c
 +++ b/libarchive/archive_read_support_filter_xz.c
-@@ -754,6 +754,7 @@ xz_filter_close(struct archive_read_filter *self)
+@@ -761,6 +761,7 @@
  static int
  lzma_bidder_init(struct archive_read_filter *self)
  {
@@ -320,7 +298,7 @@
  	int r;
  
  	r = __archive_read_program(self, "lzma -d -qq");
-@@ -763,11 +764,15 @@ lzma_bidder_init(struct archive_read_filter *self)
+@@ -770,11 +771,15 @@
  	self->code = ARCHIVE_FILTER_LZMA;
  	self->name = "lzma";
  	return (r);
@@ -336,7 +314,7 @@
  	int r;
  
  	r = __archive_read_program(self, "xz -d -qq");
-@@ -777,11 +782,15 @@ xz_bidder_init(struct archive_read_filter *self)
+@@ -784,11 +789,15 @@
  	self->code = ARCHIVE_FILTER_XZ;
  	self->name = "xz";
  	return (r);
@@ -352,7 +330,7 @@
  	int r;
  
  	r = __archive_read_program(self, "lzip -d -q");
-@@ -791,6 +800,9 @@ lzip_bidder_init(struct archive_read_filter *self)
+@@ -798,6 +807,9 @@
  	self->code = ARCHIVE_FILTER_LZIP;
  	self->name = "lzip";
  	return (r);
@@ -364,7 +342,7 @@
  #endif /* HAVE_LZMA_H */
 --- a/libarchive/archive_read_support_filter_zstd.c
 +++ b/libarchive/archive_read_support_filter_zstd.c
-@@ -147,6 +147,7 @@ zstd_bidder_bid(struct archive_read_filter_bidder *self,
+@@ -142,6 +142,7 @@
  static int
  zstd_bidder_init(struct archive_read_filter *self)
  {
@@ -372,7 +350,7 @@
  	int r;
  
  	r = __archive_read_program(self, "zstd -d -qq");
-@@ -156,6 +157,9 @@ zstd_bidder_init(struct archive_read_filter *self)
+@@ -151,6 +152,9 @@
  	self->code = ARCHIVE_FILTER_ZSTD;
  	self->name = "zstd";
  	return (r);
@@ -384,7 +362,7 @@
  #else
 --- a/libarchive/archive_read_support_format_mtree.c
 +++ b/libarchive/archive_read_support_format_mtree.c
-@@ -57,6 +57,8 @@ __FBSDID("$FreeBSD: head/lib/libarchive/archive_read_support_format_mtree.c 2011
+@@ -57,6 +57,8 @@
  #include "archive_string.h"
  #include "archive_pack_dev.h"
  
@@ -393,7 +371,7 @@
  #ifndef O_BINARY
  #define	O_BINARY 0
  #endif
-@@ -2023,3 +2025,11 @@ readline(struct archive_read *a, struct mtree *mtree, char **start,
+@@ -2153,3 +2155,11 @@
  		find_off = u - mtree->line.s;
  	}
  }
@@ -405,29 +383,17 @@
 +    return ARCHIVE_OK;
 +}
 +#endif
---- a/libarchive/archive_string.c
-+++ b/libarchive/archive_string.c
-@@ -1323,7 +1323,7 @@ free_sconv_object(struct archive_string_conv *sc)
- 	free(sc);
- }
- 
--#if defined(_WIN32) && !defined(__CYGWIN__)
-+#if defined(_WIN32) && !defined(__CYGWIN__) && WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
- static unsigned
- my_atoi(const char *p)
- {
 --- a/libarchive/archive_util.c
 +++ b/libarchive/archive_util.c
-@@ -209,7 +209,7 @@ __archive_errx(int retvalue, const char *msg)
-  * Create a temporary file
+@@ -222,6 +222,7 @@
   */
  #if defined(_WIN32) && !defined(__CYGWIN__)
--
+ 
 +#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
  /*
   * Do not use Windows tmpfile() function.
   * It will make a temporary file under the root directory
-@@ -392,6 +392,20 @@ __archive_mkstemp(wchar_t *template)
+@@ -442,6 +443,20 @@
  	return __archive_mktempx(NULL, template);
  }
  
@@ -450,7 +416,7 @@
  static int
 --- a/libarchive/archive_windows.h
 +++ b/libarchive/archive_windows.h
-@@ -106,13 +106,17 @@
+@@ -104,13 +104,17 @@
  #define	lseek		__la_lseek
  #define __LA_LSEEK_NEEDED
  #endif
@@ -468,7 +434,7 @@
  #if !defined(__WATCOMC__)
  #if !defined(__BORLANDC__)
  #define	strdup		_strdup
-@@ -122,8 +126,12 @@
+@@ -120,8 +124,12 @@
  #define	umask		_umask
  #endif
  #endif
@@ -481,15 +447,7 @@
  
  #if !defined(__WATCOMC__)
  
-@@ -263,7 +271,6 @@
-     #define	F_OK    0       /*  Test for existence of file  */
- #endif
- 
--
- /* Replacement POSIX function */
- extern int	 __la_fstat(int fd, struct stat *st);
- extern int	 __la_lstat(const char *path, struct stat *st);
-@@ -276,8 +283,13 @@ extern int	 __la_stat(const char *path, struct stat *st);
+@@ -274,8 +282,13 @@
  extern pid_t	 __la_waitpid(HANDLE child, int *status, int option);
  extern ssize_t	 __la_write(int fd, const void *buf, size_t nbytes);
  
@@ -505,7 +463,7 @@
  #define WEXITSTATUS(sts)	(sts & 0x0FF)
 --- a/libarchive/archive_write_add_filter_program.c
 +++ b/libarchive/archive_write_add_filter_program.c
-@@ -330,7 +330,7 @@ int
+@@ -329,7 +329,7 @@
  __archive_write_program_close(struct archive_write_filter *f,
      struct archive_write_program_data *data)
  {
@@ -516,7 +474,7 @@
  	if (data->child == 0)
 --- a/tar/CMakeLists.txt
 +++ b/tar/CMakeLists.txt
-@@ -24,10 +24,10 @@ IF(ENABLE_TAR)
+@@ -27,10 +27,10 @@
      ../libarchive_fe/passphrase.h
    )
    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../libarchive_fe)
@@ -529,4 +487,3 @@
  
    # bsdtar documentation
    SET(bsdtar_MANS bsdtar.1)
-
