@@ -25,6 +25,7 @@
     </assets>
     <summary lang="bs_BA">Dodatak za arhiviranje i kompresiju u više formata</summary>
     <summary lang="ca_ES">Complement d&apos;arxiu i compressió multi-format</summary>
+    <summary lang="cs_CZ">Doplněk podporující více archivních a kompresních formátů</summary>
     <summary lang="da_DK">Multiformat arkiverings- og komprimerings-add-on</summary>
     <summary lang="de_DE">Addon zur Verarbeitung mehrerer Archivformate</summary>
     <summary lang="en_GB">Multi-format archive and compression addon</summary>
@@ -46,6 +47,7 @@
     <summary lang="zh_CN">多格式文档和压缩插件</summary>
     <description lang="bs_BA">Ovaj dodatak koristi biblioteku libarchive za čitanje raznih arhivskih i komprimiranih formata.[CR][CR]Podržani formati su:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="ca_ES">Aquest complement utilitza la llibreria libarchive per llegir diversos formats d&apos;arxiu i compressió.[CR][CR]Els formats compatibles són:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
+    <description lang="cs_CZ">Tento doplněk používá knihovnu libarchive ke čtení různých archivních a kompresních formátů.[CR][CR]Podporované formáty:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="da_DK">Dette add-on anvender libarchive-biblioteket til at læse en række arkiv- og komprimeringsformater.[CR][CR]Understøttede formater er:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz , tgz, tbz2, xz, zip</description>
     <description lang="de_DE">Dieses Addon verwendet die Bibliothek libarchive, um verschiedene Archiv- und Komprimierungsformate zu verarbeiten.[CR][CR]Unterstützte Formate sind:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
     <description lang="en_GB">This add-on uses the libarchive library to read a variety of archive and compression formats.[CR][CR]Supported formats are:[CR]7z, bz2, gz, tar, tar.bz2, tar.gz, tar.xz, tgz, tbz2, xz, zip</description>
