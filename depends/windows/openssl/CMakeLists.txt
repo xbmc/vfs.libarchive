@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(openssl VERSION 3.5.2 LANGUAGES C)
+project(openssl VERSION 3.5.8 LANGUAGES C)
 
 find_package(StrawberryPerl REQUIRED)
 
@@ -26,7 +26,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "WindowsStore")
 	set(OPENSSL_PLATFORM "${OPENSSL_PLATFORM}-UWP")
 endif()
 
-set(configure_options no-shared no-asm no-apps no-tests no-ui-console zlib --prefix=${CMAKE_INSTALL_PREFIX} --with-zlib-include=${OUTPUT_DIR}/include)
+set(configure_options no-shared no-asm no-apps no-capieng no-tests no-ui-console no-winstore zlib --prefix=${CMAKE_INSTALL_PREFIX} --with-zlib-include=${OUTPUT_DIR}/include)
 
 set(ENV{PATH} "${STRAWBERRYPERL_PATH};$ENV{PATH}")
 execute_process(COMMAND perl Configure ${OPENSSL_PLATFORM} ${configure_options}
