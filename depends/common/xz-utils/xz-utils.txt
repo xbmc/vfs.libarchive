@@ -1,1 +1,1 @@
-xz-utils https://tukaani.org/xz/xz-5.2.5.tar.xz
+xz-utils https://github.com/tukaani-project/xz/releases/download/v5.8.4/xz-5.8.4.tar.xz
