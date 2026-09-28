@@ -34,6 +34,11 @@ if(LibLZMA_FOUND)
   list(APPEND DEPLIBS ${LIBLZMA_LIBRARIES})
 endif()
 
+if(WIN32)
+  # Static libarchive uses CNG for Windows digests and random bytes.
+  list(APPEND DEPLIBS bcrypt)
+endif()
+
 add_definitions(-DLIBARCHIVE_STATIC -D_CRT_NONSTDC_NO_DEPRECATE)
 
 build_addon(vfs.libarchive ARCHIVE DEPLIBS)

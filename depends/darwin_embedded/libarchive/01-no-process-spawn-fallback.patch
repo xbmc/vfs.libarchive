@@ -1,0 +1,33 @@
+--- a/libarchive/filter_fork_posix.c
++++ b/libarchive/filter_fork_posix.c
+@@ -266,4 +266,29 @@
+ #endif
+ }
+
+-#endif /* defined(HAVE_PIPE) && defined(HAVE_VFORK) && defined(HAVE_FCNTL) */
++#else
++
++#include <sys/types.h>
++#include "archive.h"
++#include "filter_fork.h"
++
++/* Embedded Apple platforms cannot run external compression programs. */
++int
++__archive_create_child(const char *cmd, int *child_stdin, int *child_stdout,
++    pid_t *out_child)
++{
++	(void)cmd;
++	(void)child_stdin;
++	(void)child_stdout;
++	(void)out_child;
++	return ARCHIVE_FAILED;
++}
++
++void
++__archive_check_child(int in, int out)
++{
++	(void)in;
++	(void)out;
++}
++
++#endif /* process creation is available */

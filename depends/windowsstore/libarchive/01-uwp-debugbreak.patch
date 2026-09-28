@@ -1,0 +1,8 @@
+--- a/libarchive/archive_check_magic.c
++++ b/libarchive/archive_check_magic.c
+@@ -75,0 +76 @@
++#if WINAPI_FAMILY_PARTITION(WINAPI_PARTITION_DESKTOP)
+@@ -76,0 +78,3 @@
++#else
++	__debugbreak();
++#endif
